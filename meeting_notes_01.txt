@@ -1,0 +1,86 @@
+# The use of AI
+
+- coding
+- writing 
+- tutoring 
+
+Statement in the report.
+
+Dec 16th last meeting this year. Jan 14th in 2026.
+
+# Q - LEARNING
+
+Q-TABLE: States x Actions Q(s,a)=expected result of action a in state s if the player continues to play optimally.
+
+1 = WIN, 0 = TIE, -1 = LOSE
+States = all legitimate game situations
+
+xx_
+oo_
+xox
+
+_ _ _
+_ _ _
+_ _ _
+
+
+x o _
+_ x _
+_ _ _
+
+3^9 rough upper limit
+
+n(x)=n(o), n(x)=n(o)+1
+only one row/column/diagonal of either x or o
+
+s		a		Q(s,a)
+"xx_oo_xo_"     3		1 (x win)
+"xx_oo_xo_"     6		0 (tie)
+"xx_oo_xo_"     9		-1  (if 0's go for a=6 Player-o is optimal)
+				0.5*0+0.5*(-1)=-0.5    (Player-o is random)
+
+"xx_o__xo_"
+
+TASK 1: create a list of all possible states
+TASK 2: fill up the Q-table (for x and o) when playing against the optimal opponent [bonus: random opponent]
+
+xxo
+oo_
+xox
+
+n.turns= 8
+Q(s,3) = 0
+
+
+
+xx_
+oo_
+xox
+n.turns=7
+
+TASK: FILL UP THE Q_table
+
+### REINFORCEMENT LEARNING:
+1. assign Q(s,a) table some initial values (0)
+2. Play a game (using the current Q(s,a) table) and record s, a, s' [resulting state] and the final outcome Q
+3. Update Q'(s,a) = (1-alpha)*Q(s,a) + alpha*(r+max Q(s',a))
+
+s			a	r	s'
+'_ _ _ _ _ _ _ _ _' 	1	0	'x _ _ _ _ _ _ _ _'
+'x _ _ _ o _ _ _ _'	2	0	'x x _ _ o _ _ _ _'
+'x x _ _ o _ _ _ o'	3	1	'x x x _ o _ _ _ o'
+
+TASK: write a function for playing a game, given [current] Q-table
+In each state s, choose action a based on the Q-table
+- random (choose one of the available options) [not reinforcement learning]
+- optimal (choose the best possible option) argmax_a Q(s,a) [EXPLOITATION]
+- choose move a with probability depending on Q(s,a) [EXPLORE options] Keep in mind -1 < Q < 1.
+
+0 <= alpha <= 1 is the learning rate. (TRY DIFFERENT LEVELS).
+
+= produce Q-table
+
+### QUESTIONS TO ASK:
+1. What is the best first move for x when playing against optimal opponent (o)
+2. What is the best first move for x when playing against random opponent (o)
+3. What is the distribution of wins/losses/ties when playing against optimal/random (o) being trained on optimal/random
