@@ -1,7 +1,4 @@
 """This code creates a list all posittive valid states of tic-tac-toe as binary bitboard tuples."""
-import time
-
-start_time = time.perf_counter()
 
 winning_positions = [0b000000111, # row 0
                   0b000111000, # row 1
@@ -34,8 +31,8 @@ def valid_state(naughts, crosses):
     # If naughts won, no. of naughts should = no. of crosses
     if o_wins and n_0 != n_x:
         return 0
-    # Remaining wins must be valid
-    if x_wins or o_wins:
+    # Remaining wins (and draws) must be valid
+    if x_wins or o_wins or (n_x == 5 and n_0 == 4):
         return 2  
     # Cannot be a win so must be a valid game state
     return 1
@@ -43,7 +40,7 @@ def valid_state(naughts, crosses):
 def return_states():
     """Returns all possible valid winning and gameplay states of tic-tac-toe."""
     gameplay_states = []
-    winning_states = []
+    terminal_states = []
     # The greatest number that a naughts position can correspond to is 480 (111100000)
     # For a crosses position this is 496 (111110000)
     for naughts in range(0, 481):
@@ -52,20 +49,17 @@ def return_states():
             if result == 1:
                 gameplay_states.append((naughts, crosses))
             elif result == 2:
-                winning_states.append((naughts, crosses))
-    return (gameplay_states, winning_states)
+                terminal_states.append((naughts, crosses))
+    return gameplay_states, terminal_states
 
-gameplay_states, winning_states = return_states()
+gameplay_states, terminal_states = return_states()
 print(len(gameplay_states))
-print(len(winning_states))
-
-end_time = time.perf_counter()
-
-print(end_time - start_time)
+print(len(terminal_states))
 
 # 4536 valid non-winning states 
 # 5478 valid states including winning states
 # So 942 winning states
+# 16 drawn states (?)
 
 
 
