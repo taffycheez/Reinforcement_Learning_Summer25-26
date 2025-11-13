@@ -34,26 +34,29 @@ def valid_state(naughts, crosses):
     # Remaining wins (and draws) must be valid
     if x_wins or o_wins or (n_x == 5 and n_0 == 4):
         return 2  
-    # Cannot be a win so must be a valid game state
-    return 1
+    # Cannot be a win so must be a valid game state. Return 1 to signify this as well as the depth of the game (no. of moves that have happened)
+    return (1, n_0 + n_x)
 
 def return_states():
     """Returns all possible valid winning and gameplay states of tic-tac-toe."""
-    gameplay_states = []
+    gameplay_states = {}
     terminal_states = []
     # The greatest number that a naughts position can correspond to is 480 (111100000)
     # For a crosses position this is 496 (111110000)
     for naughts in range(0, 481):
         for crosses in range(0,497):
             result = valid_state(naughts, crosses)
-            if result == 1:
-                gameplay_states.append((naughts, crosses))
+            if isinstance(result, tuple):
+                gameplay_states.setdefault(result[1], []).append((naughts, crosses))
             elif result == 2:
                 terminal_states.append((naughts, crosses))
     return gameplay_states, terminal_states
 
 gameplay_states, terminal_states = return_states()
-print(len(gameplay_states))
+len_g = 0
+for k,v in gameplay_states.items():
+    len_g += len(v)
+print(len_g)
 print(len(terminal_states))
 
 # 4536 valid non-winning states 
