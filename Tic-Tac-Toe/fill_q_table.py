@@ -32,23 +32,32 @@ while depth >= 0:
         available_moves = [8-i for i, bit in enumerate(free_positions) if bit == '0']
         if depth % 2 == 0: # crosses' turn
             for n in available_moves:
+                found = False # each state-move combination can only correspond to one terminal state
                 for t in terminal_states:
-                    if (naughts, crosses + 2**n) == t[0]:
+                    if (naughts, crosses + 2**n) == t[0]: # Adding 2^n changes the nth digit (starting at 0, going from the right) from a 0 to a 1
                         q_table.setdefault((naughts, crosses), []).append((n, t[1]))
-                # break somehow as a move can only lead to one state?
-                for state, value in higher_states.items():
-                    if (naughts, crosses + 2**n) == state:
-                        q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+                        found = True
+                        break
+                if not found:
+                    for state, value in higher_states.items():
+                        if (naughts, crosses + 2**n) == state:
+                            q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+                            break
 
         else: # naughts' turn
             for n in available_moves:
+                found = False
                 for t in terminal_states:
                     if (naughts + 2**n, crosses) == t[0]:
                         q_table.setdefault((naughts, crosses), []).append((n, t[1]))
+                        found = True
+                        break
                 # break somehow as a move can only lead to one state?
-                for state, value in higher_states.items():
-                    if (naughts + 2**n, crosses) == state:
-                        q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+                if not found:
+                    for state, value in higher_states.items():
+                        if (naughts + 2**n, crosses) == state:
+                            q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+                            break
     depth -= 1
 
 # make this more efficient? 
