@@ -5,19 +5,7 @@ start_time = time.perf_counter()
 
 import list_possible_states
 # Retrieving list of possible gameplay and won states from the previous code.
-possible_states, terminal_states = list_possible_states.return_states()
-
-# Categorising terminal states into crosses won (1), naughts won (-1), and drawn (0).
-for i, state in enumerate(terminal_states):
-    naughts, crosses = state
-    if any((crosses & w) == w for w in list_possible_states.winning_positions):
-        terminal_states[i] = (state, 1)
-    elif any((naughts & w) == w for w in list_possible_states.winning_positions):
-        terminal_states[i] = (state, -1)
-    else:
-        terminal_states[i] = (state, 0)
-
-# Using basic counter variables we can determine that 65.3% of terminal states are won by x, 33.0% by o, and 1.7% are drawn. 
+possible_states, terminal_states = list_possible_states.return_states() 
 
 q_table = {}
 
@@ -33,9 +21,9 @@ while depth >= 0:
         if depth % 2 == 0: # crosses' turn
             for n in available_moves:
                 found = False # each state-move combination can only correspond to one terminal state
-                for t in terminal_states:
-                    if (naughts, crosses + 2**n) == t[0]: # Adding 2^n changes the nth digit (starting at 0, going from the right) from a 0 to a 1
-                        q_table.setdefault((naughts, crosses), []).append((n, t[1]))
+                for state, q in terminal_states.items():
+                    if (naughts, crosses + 2**n) == state: # Adding 2^n changes the nth digit (starting at 0, going from the right) from a 0 to a 1
+                        q_table.setdefault((naughts, crosses), []).append((n, q))
                         found = True
                         break
                 if not found:
@@ -47,9 +35,9 @@ while depth >= 0:
         else: # naughts' turn
             for n in available_moves:
                 found = False
-                for t in terminal_states:
-                    if (naughts + 2**n, crosses) == t[0]:
-                        q_table.setdefault((naughts, crosses), []).append((n, t[1]))
+                for state, q in terminal_states.items():
+                    if (naughts + 2**n, crosses) == state:
+                        q_table.setdefault((naughts, crosses), []).append((n, q))
                         found = True
                         break
                 # break somehow as a move can only lead to one state?
