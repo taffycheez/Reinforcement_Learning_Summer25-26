@@ -12,7 +12,6 @@ q_table = {}
 depth = 8 # initialise to states one move away from filling the board
 while depth >= 0:
     higher_states = q_table.copy()
-    print(higher_states)
     for naughts, crosses in possible_states[depth]:
         # naughts XOR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
         free_positions = format(naughts ^ crosses, '09b')

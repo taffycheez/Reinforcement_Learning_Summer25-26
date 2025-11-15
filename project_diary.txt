@@ -1,0 +1,126 @@
+WEDNESDAY 12/11/25
+Began by thinking about how to represent a state of a game of tic-tac-toe efficiently in a computer. 
+The initial suggestion was a string of characters e.g. "xo__oxxox". My next thought was a list of numbers
+e.g. [2,1,0,0,1,2,2,1,2]. Then I thought, why not just one number? I was stumped on how to implement this, 
+but a quick Google search led me to the concept of a 'bitboard', which apparently is the way states of a 
+game of chess are implemented. In chess, the 8x8 board is represented as a 64-bit binary number, with one
+number for each type of piece (pawn, knight, etc); a '0' means the piece is absent from that square, whereas
+a '1' means the piece occupies that square. 
+
+I spent about 2 hours implementing this in Python for a tic-tac-toe game. As I had never worked with binary
+numbers before, there was a learning curve, but this (https://www.geeksforgeeks.org/python/python-bitwise-operators/) 
+GeeksForGeeks page was helpful. I used two 9-bit binary numbers to implement a board. This felt inefficient, as it meant
+a 16-bit block would have to be allocated for each number, with 7 bits free. However, apparently Python stores 
+integers in blocks of size 28 or more by default, which made me feel a bit better. If implementing this code in C
+or similar, it might be a good idea to use 32-bit blocks (4 bytes per number, less space wasted) by storing each game
+state as a single binary number (size 18 bits).
+
+Since the number of naughts had to be equal, or one less, than the number of crosses, I counted each using the .bit_count()
+method and checked this. I also needed a way to check that each square was only occupied by one (or none) of naughts or crosses,
+and found my solution in the '&' operator (discovered in the above GeeksForGeeks page). This returns '1' only if both bits in 
+a position are '1', so I needed naughts & crosses to always be '000000000' - i.e. the number 0. Finally, I needed only one of 
+naughts and crosses to have won. With some help from Grok, I checked this by having a list of 'winning positions' (top row full,
+leftermost column full, upper left to lower right diagonal full, etc.). Firstly I decided that neither naughts nor crosses could
+win (so naughts & w != w, crosses & w != w for all w in winning_positions) but then I realised I did actually need to keep track
+of valid winning positions, so came up with the following final code to check the state of a game:
+
+def valid_state(naughts, crosses):
+    """Checks whether the given tic-tac-toe bitboard represents a valid state of the game."""
+    # Each square must be occupied by only one piece
+    # So naughts AND crosses must return 0
+    n_0 = naughts.bit_count()
+    n_x = crosses.bit_count()
+    if naughts & crosses != 0:
+        return False
+    # Number of crosses = number of naughts (or number of naughts + 1)
+    # So if no_naughts > no_crosses or no_crosses > no_naughts + 1, invalid state
+    if (n_0 > n_x) or (n_x > n_0 + 1):
+        return False
+    # Valid non-final position cannot have a row, column, or diagonal filled by one symbol
+    # So naughts/crosses AND any winning state cannot return the winning state
+    # I.e. naughts/crosses cannot have a winning position filled
+    for winning_position in winning_positions:
+        if ((naughts & winning_position == winning_position) and (n_0 != n_x)) or ((crosses & winning_position == winning_position) and (n_x != n_0 + 1)):
+            return False
+    return True
+
+Then all that remained was to loop through all possible combinations of numbers corresponding to tic-tac-toe bitboards and, if valid,
+append them to a list of valid states. 
+
+def return_states():
+    """Returns all possible valid states of tic-tac-toe."""
+    possible_states = []
+    # The greatest number that a naughts position can correspond to is 480 (111100000)
+    # For a crosses position this is 496 (111110000)
+    for naughts in range(0, 481):
+        for crosses in range(0,497):
+            if valid_state(naughts, crosses):
+                possible_states.append((naughts, crosses))
+    return possible_states
+
+This loop runs 481 x 497 = 239,057 times, and produced 5478 valid states (or 4536 valid non-winning states) in just tenths of a second.
+
+Searching to check if I had the right number of states, I found a paper titled 'A Combinatorial Analysis of Tic-Tac-Toe and The
+Theoretical Advantage of Playing First'; not wanting to 'spoil' too much for myself, I only read the first section, which told me that
+there are indeed 5478 possible game states. This is because:
+- there are 9 positions, and 3 possible values (o, x, empty) for each position, so 3^9 = 19,683 ways to put (or not put) x and o on a board
+- but following the rules of the game, firstly, n𝑒 + 𝑛𝑥 + 𝑛𝑜 = 9; n𝑥 = 𝑛𝑜 𝑜𝑟 𝑛𝑥 = 𝑛𝑜 + 1;. Then considering that naughts, crosses, and empty
+spots are indistinguishable, the number of combinations at each value of ne, nx, no is 9!/ne!nx!no!. That is:
+𝑃(9; 0, 0, 9) =
+9!
+0!0!9!
+= 1
+After turn 1 (𝑛𝑥 = 1, 𝑛𝑜 = 0, 𝑛𝑒 = 8):
+𝑃(9; 1, 0, 8) =
+9!
+1!0!8!
+= 9
+After turn 2 (𝑛𝑥 = 1, 𝑛𝑜 = 1, 𝑛𝑒 = 7):
+𝑃(9; 1, 1, 7) =
+9!
+1!1!7!
+= 72 
+After turn 3 (𝑛𝑥 = 2, 𝑛𝑜 = 1, 𝑛𝑒 = 6):
+𝑃(9; 2, 1, 6) =
+9!
+2!1!6!
+= 252
+After turn 4 (𝑛𝑥 = 2, 𝑛𝑜 = 2, 𝑛𝑒 = 5):
+𝑃(9; 2, 2, 5) =
+9!
+2!2!5!
+= 756
+After turn 5 (𝑛𝑥 = 3, 𝑛𝑜 = 2, 𝑛𝑒 = 4):
+𝑃(9; 3, 2, 4) =
+9!
+3!2!4!
+= 1260
+After turn 6 (𝑛𝑥 = 3, 𝑛𝑜 = 3, 𝑛𝑒 = 3):
+𝑃(9; 3, 3, 3) =
+9!
+3!3!3!
+= 1680 
+After turn 7 (𝑛𝑥 = 4, 𝑛𝑜 = 3, 𝑛𝑒 = 2):
+𝑃(9; 4, 3, 2) =
+9!
+4!3!2!
+= 1260
+After turn 8 (𝑛𝑥 = 4, 𝑛𝑜 = 4, 𝑛𝑒 = 1):
+𝑃(9; 4, 4, 1) =
+9!
+4!4!1!
+= 630
+After turn 9 (𝑛𝑥 = 5, 𝑛𝑜 = 4, 𝑛𝑒 = 0):
+𝑃(9; 5, 4, 0) =
+9!
+5!4!0!
+= 126 
+So there are 1 +9 + 72 +252 + 756 + 1260 + 1680 + 1260 +630 + 126 = 6046 reachable game states so far. However, we must consider
+that only one player can win at a time (there )
+https://informatika.stei.itb.ac.id/~rinaldi.munir/Matdis/2021-2022/Makalah2021/Makalah-Matdis-2021%20(148).pdf
+
+THURSDAY 13/11/25
+
+FRIDAY 14/11/25
+
+SATURDAY 15/11/25

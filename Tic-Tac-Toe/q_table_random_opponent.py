@@ -1,0 +1,1 @@
+"""This code uses dynamic programming to create and fill a q-table with possible moves and Q-scores for each possible state of tic-tac-toe, and for a random opponent."""
