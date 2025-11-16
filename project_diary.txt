@@ -116,11 +116,96 @@ After turn 9 (𝑛𝑥 = 5, 𝑛𝑜 = 4, 𝑛𝑒 = 0):
 5!4!0!
 = 126 
 So there are 1 +9 + 72 +252 + 756 + 1260 + 1680 + 1260 +630 + 126 = 6046 reachable game states so far. However, we must consider
-that only one player can win at a time (there )
+that only one player can win at a time. Now, after crosses' turn, there is one more cross than naught. After naughts' turn, there
+are as many naughts as crosses. So, after naughts have won (meaning the game is ended, and cross doesn't get their next turn) there
+must be as many naughts as crosses; and after crosses have won, there must be one more cross than naught. This eliminates the following
+states:
+8 × 𝑃(6; 0, 3, 3) = 8 ×
+6!
+0!3!3!
+= 8 × 20 = 160 (21)
+8 × 𝑃(6; 1, 4, 1) = 8 ×
+6!
+1!4!1!
+= 8 × 30 = 240 (22)
+8 × 𝑃(6; 4, 0, 2) = 8 ×
+6!
+4!0!2!
+= 8 × 15 = 120 (23)
+8 × 𝑃(6; 5, 1, 0) = 8 ×
+6!
+5!1!0!
+= 8 × 6 = 48 (24)
+160 + 240 +120 + 48 = 568
+6046 - 568 = 5478, our final answer. 
 https://informatika.stei.itb.ac.id/~rinaldi.munir/Matdis/2021-2022/Makalah2021/Makalah-Matdis-2021%20(148).pdf
 
 THURSDAY 13/11/25
+Started thinking about generating the q-table today, and realised I would need to generate winning and gameplay states separately. Changed my code to do this,
+returning 0 if invalid state, 1 if gameplay, 2 if win. 
+
+Also spent some time making code to convert a bitboard representation of a tic-tac-toe game to a visual one. 
+
+Finally created code to fill up q-table for states one move away from terminal. For each possible move, and each possible terminal state, check if
+that move leads to that terminal state. 
+
+for naughts, crosses in possible_states:
+    n_0 = naughts.bit_count()
+    n_x = crosses.bit_count()
+    if n_0 == n_x: # Crosses' turn
+        for n in range(9):
+            for t in terminal_states:
+                if (naughts, crosses + 2**n) == t[0]: # Adding 2^n changes the nth digit (starting at 0, going from the right) to a 1
+                    q_table.append([(naughts, crosses), n, t[1]])
+    else: # Naughts' turn
+        for n in range(9):
+            for t in terminal_states:
+                if (naughts, crosses + 2**n) == t[0]:
+                    q_table.append([(naughts, crosses), n, t[1]])
 
 FRIDAY 14/11/25
 
+Changed 'list_possible_states' code to generate a dictionary of states for each depth/number of moves passed. Using this created code to generate the q-table. 
+
+For the q-table code first found indexes of available moves (using a binary string) and then for each of these indexes added 2^n to the player whose turn it was
+and checked if this corresponded to a terminal state, or a state that had already been checked. did this for every depth, going down. 
+
+q_table = {}
+
+depth = 8 # initialise to states one move away from filling the board
+while depth >= 0:
+    higher_states = q_table.copy()
+    print(higher_states)
+    for naughts, crosses in possible_states[depth]:
+        # naughts XOR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
+        free_positions = format(naughts ^ crosses, '09b')
+        # so available moves are wherever a digit of the above result is 0
+        available_moves = [8-i for i, bit in enumerate(free_positions) if bit == '0']
+        if depth % 2 == 0: # crosses' turn
+            for n in available_moves:
+                for t in terminal_states:
+                    if (naughts, crosses + 2**n) == t[0]:
+                        q_table.setdefault((naughts, crosses), []).append((n, t[1]))
+                # break somehow as a move can only lead to one state?
+                for state, value in higher_states.items():
+                    if (naughts, crosses + 2**n) == state:
+                        q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+
+        else: # naughts' turn
+            for n in available_moves:
+                for t in terminal_states:
+                    if (naughts + 2**n, crosses) == t[0]:
+                        q_table.setdefault((naughts, crosses), []).append((n, t[1]))
+                # break somehow as a move can only lead to one state?
+                for state, value in higher_states.items():
+                    if (naughts + 2**n, crosses) == state:
+                        q_table.setdefault((naughts, crosses), []).append((n, value[0][1]))
+    depth -= 1
+
+Then broke loops when a state-move combo was found using a found boolean and loop breaks. 
+
 SATURDAY 15/11/25
+Created this diary. 
+
+SUNDAY 16/11/25
+Finished filling in diary. 

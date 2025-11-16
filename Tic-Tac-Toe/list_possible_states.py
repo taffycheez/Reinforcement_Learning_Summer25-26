@@ -33,7 +33,7 @@ def valid_state(naughts, crosses):
         return 0
     # Remaining wins (and draws) must be valid
     if x_wins or o_wins or (n_x == 5 and n_0 == 4):
-        return 2  
+        return (2, n_0 + n_x)  
     # Cannot be a win so must be a valid game state. Return 1 to signify this as well as the depth of the game (no. of moves that have happened)
     return (1, n_0 + n_x)
 
@@ -46,15 +46,17 @@ def return_states():
     for naughts in range(0, 481):
         for crosses in range(0,497):
             result = valid_state(naughts, crosses)
-            if isinstance(result, tuple):
+            if result == 0:
+                continue
+            if result[0] == 1:
                 gameplay_states.setdefault(result[1], []).append((naughts, crosses))
-            elif result == 2:
+            elif result[0] == 2:
                 if any((crosses & w) == w for w in winning_positions):
-                    terminal_states[(naughts, crosses)] = 1
+                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), 1))
                 elif any((naughts & w) == w for w in winning_positions):
-                    terminal_states[(naughts, crosses)] = -1
+                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), -1))
                 else:
-                    terminal_states[(naughts, crosses)] = 0
+                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), 0))
     return gameplay_states, terminal_states
 
 gameplay_states, terminal_states = return_states()
@@ -62,8 +64,10 @@ len_g = 0
 len_t = 0
 for k,v in gameplay_states.items():
     len_g += len(v)
+for k,v in terminal_states.items():
+    len_t += len(v)
 print(len_g)
-print(len(terminal_states))
+print(len_t)
 
 # 4536 valid non-winning states 
 # 5478 valid states including winning states
