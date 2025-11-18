@@ -209,3 +209,13 @@ Created this diary.
 
 SUNDAY 16/11/25
 Finished filling in diary. 
+
+Updated q-table code to only check state one higher. To implement this changed terminal_states to a dictionary of depth-(state, q). 
+
+I feel like I am missing something. I don't think I'm factoring in the fact that I am playing against an optimal opponent. And I think my program is generating
+too many moves. Maybe I did the code for the random opponent by mistake. I am just matching with the first thing that comes up instead of considering the best
+move. 
+
+MONDAY 17/11/25
+
+Need to have q-table include terminal states as well. 

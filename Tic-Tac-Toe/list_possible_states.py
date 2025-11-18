@@ -39,8 +39,7 @@ def valid_state(naughts, crosses):
 
 def return_states():
     """Returns all possible valid winning and gameplay states of tic-tac-toe."""
-    gameplay_states = {}
-    terminal_states = {}
+    possible_states = {}
     # The greatest number that a naughts position can correspond to is 480 (111100000)
     # For a crosses position this is 496 (111110000)
     for naughts in range(0, 481):
@@ -49,25 +48,15 @@ def return_states():
             if result == 0:
                 continue
             if result[0] == 1:
-                gameplay_states.setdefault(result[1], []).append((naughts, crosses))
+                possible_states.setdefault(result[1], []).append(((naughts, crosses), None))
             elif result[0] == 2:
                 if any((crosses & w) == w for w in winning_positions):
-                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), 1))
+                    possible_states.setdefault(result[1], []).append(((naughts, crosses), 1))
                 elif any((naughts & w) == w for w in winning_positions):
-                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), -1))
+                    possible_states.setdefault(result[1], []).append(((naughts, crosses), -1))
                 else:
-                    terminal_states.setdefault(result[1], []).append(((naughts, crosses), 0))
-    return gameplay_states, terminal_states
-
-gameplay_states, terminal_states = return_states()
-len_g = 0
-len_t = 0
-for k,v in gameplay_states.items():
-    len_g += len(v)
-for k,v in terminal_states.items():
-    len_t += len(v)
-print(len_g)
-print(len_t)
+                    possible_states.setdefault(result[1], []).append(((naughts, crosses), 0))
+    return possible_states
 
 # 4536 valid non-winning states 
 # 5478 valid states including winning states
