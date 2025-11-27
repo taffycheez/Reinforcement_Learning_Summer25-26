@@ -22,7 +22,7 @@ def valid_state(naughts, crosses):
     n_x = crosses.bit_count()
     if (n_0 > n_x) or (n_x > n_0 + 1):
         return 0
-    # Count number of 'wins' (filled rows, columns, or diagonals) for naughts and for crosses
+    # Determine whether there are any 'wins' (filled rows, columns, or diagonals) for naughts and for crosses
     x_wins = any((crosses & winning_pos) == winning_pos for winning_pos in winning_positions)
     o_wins = any((naughts & winning_pos) == winning_pos for winning_pos in winning_positions)
     # For a valid crosses win, number of crosses should = no. naughts + 1 
@@ -32,14 +32,19 @@ def valid_state(naughts, crosses):
     if o_wins and n_0 != n_x:
         return 0
     # Remaining wins (and draws) must be valid
-    if x_wins or o_wins or (n_x == 5 and n_0 == 4):
-        return (2, n_0 + n_x)  
-    # Cannot be a win so must be a valid game state. Return 1 to signify this as well as the depth of the game (no. of moves that have happened)
-    return (1, n_0 + n_x)
+    if x_wins:
+        return (1, n_0 + n_x) # x won
+    if o_wins:
+        return (-1, n_0 + n_x) # o won
+    if n_0 + n_x == 9:
+        return (0, n_0 + n_x) # draw
+    # Cannot be a win so must be a valid game state. Return None to signify this as well as the depth of the game (no. of moves that have happened)
+    return (None, n_0 + n_x)
 
 def return_states():
     """Returns all possible valid winning and gameplay states of tic-tac-toe."""
-    possible_states = {}
+    possible_states = {} # dict mapping depth/no. of moves to list of states as tuples of binary numbers
+    state_value_dict = {} # dictionary mapping state to value (-1 for naughts wins, 1 for crosses wins, 0 for draw)
     # The greatest number that a naughts position can correspond to is 480 (111100000)
     # For a crosses position this is 496 (111110000)
     for naughts in range(0, 481):
@@ -47,17 +52,16 @@ def return_states():
             result = valid_state(naughts, crosses)
             if result == 0:
                 continue
-            if result[0] == 1:
-                possible_states.setdefault(result[1], []).append(((naughts, crosses), None))
-            elif result[0] == 2:
-                if any((crosses & w) == w for w in winning_positions):
-                    possible_states.setdefault(result[1], []).append(((naughts, crosses), 1))
-                elif any((naughts & w) == w for w in winning_positions):
-                    possible_states.setdefault(result[1], []).append(((naughts, crosses), -1))
-                else:
-                    possible_states.setdefault(result[1], []).append(((naughts, crosses), 0))
-    return possible_states
+            if result[0] == None:
+                possible_states.setdefault(result[1], []).append((naughts, crosses))
+                state_value_dict[(naughts, crosses)] = None
+            else:
+                possible_states.setdefault(result[1], []).append((naughts, crosses))
+                state_value_dict[(naughts, crosses)] = result[0]
+    return possible_states, state_value_dict
 
+possible_states, state_value_dict = return_states()
+print(possible_states)
 # 4536 valid non-winning states 
 # 5478 valid states including winning states
 # So 942 winning states

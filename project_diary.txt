@@ -219,3 +219,8 @@ move.
 MONDAY 17/11/25
 
 Need to have q-table include terminal states as well. 
+
+THURSDAY 27/11/25
+
+Created txt file of list of possible states and summary of their types. Read through list_possible_states function and decided to create a 
+state-value dictionary as suggested by Grok to increase efficiency when creating the q-table. Next stage is to alter my q-table generation code. 

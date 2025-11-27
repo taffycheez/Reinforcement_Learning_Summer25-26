@@ -7,7 +7,7 @@ start_time = time.perf_counter()
 
 import list_possible_states
 # Retrieving list of possible gameplay and won states from the previous code.
-possible_states = list_possible_states.return_states() 
+possible_states, state_value_dict = list_possible_states.return_states() 
 
 q_table = {}
 higher_states = {}
