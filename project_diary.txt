@@ -224,3 +224,17 @@ THURSDAY 27/11/25
 
 Created txt file of list of possible states and summary of their types. Read through list_possible_states function and decided to create a 
 state-value dictionary as suggested by Grok to increase efficiency when creating the q-table. Next stage is to alter my q-table generation code. 
+
+Thinking about how many possible moves there should be:
+There are 5478 states. 4520 of them are non-terminal. 
+As established above:
+
+0 moves - 1 state
+1 move - 9 states
+2 moves - 72
+3 moves - 252
+4 moves - 756
+5 moves - 1260
+6 moves - 1680-568=1112
+7 moves - 1260
+8 moves - 630

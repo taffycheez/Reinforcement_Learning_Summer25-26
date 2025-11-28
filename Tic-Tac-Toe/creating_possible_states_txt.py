@@ -1,5 +1,5 @@
-"""This file implements a function that, given a bitboard representation of a game of tic-tac-toe, converts it to a visual representation using a matrix
-of naughts and crosses."""
+"""This file implements a function that, given a list of all possible bitboard representations of a game of tic-tac-toe, converts it to a list of 
+visual representations using x's and o's."""
 
 def bitboard_to_visual(bitboard):
     visual = list('_' for i in range(9)) # creating 'empty' list
@@ -24,12 +24,11 @@ draws = 0
 with open("possible_states.txt", "w") as file:
     for statelist in possible_states.values(): # for list of states at a depth
         for state in statelist: # for state in this list
-            val = state_value_dict[state] # retrieve value
-            if val == None: # if gameplay state
+            if state not in state_value_dict: # if gameplay state
                 gameplay += 1
-            elif val == 1: # if x won
+            elif state_value_dict[state] == 1: # if x won
                 x_wins += 1
-            elif val == -1: # if o won
+            elif state_value_dict[state] == -1: # if o won
                 o_wins += 1
             else: # otherwise must be draw
                 draws += 1

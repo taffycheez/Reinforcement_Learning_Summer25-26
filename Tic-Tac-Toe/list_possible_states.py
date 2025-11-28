@@ -54,14 +54,12 @@ def return_states():
                 continue
             if result[0] == None:
                 possible_states.setdefault(result[1], []).append((naughts, crosses))
-                state_value_dict[(naughts, crosses)] = None
             else:
                 possible_states.setdefault(result[1], []).append((naughts, crosses))
                 state_value_dict[(naughts, crosses)] = result[0]
     return possible_states, state_value_dict
 
 possible_states, state_value_dict = return_states()
-print(possible_states)
 # 4536 valid non-winning states 
 # 5478 valid states including winning states
 # So 942 winning states
