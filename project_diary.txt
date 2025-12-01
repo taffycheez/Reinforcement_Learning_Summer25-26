@@ -227,7 +227,7 @@ state-value dictionary as suggested by Grok to increase efficiency when creating
 
 Thinking about how many possible moves there should be:
 There are 5478 states. 4520 of them are non-terminal. 
-As established above:
+As established above: (exact counts are from my list of possible states)
 
 0 moves - 1 state
 1 move - 9 states
@@ -235,6 +235,35 @@ As established above:
 3 moves - 252
 4 moves - 756
 5 moves - 1260
-6 moves - 1680-568=1112
-7 moves - 1260
-8 moves - 630
+6 moves - 1520
+7 moves - 1140
+8 moves - 390
+9 moves - 78
+
+SATURDAY 29/11/25
+
+continuing from my thoughts above, for 0 moves done there are 9 possible moves to go.
+1 move - 8 moves
+2 moves - 7 moves
+and so on. 
+
+So the total number of moves should be the sum of (9 - depth) * num_states_at_depth. 
+
+Oh, but it should be number of *nonterminal* states at a depth. So counting it up using my list of possible states, the actual numbers are
+0 moves - 1 
+1 move - 9 
+2 moves - 72
+3 moves - 252
+4 moves - 756
+5 moves - 1140
+6 moves - 1372
+7 moves - 696
+8 moves - 222
+9 moves - 0
+
+So total_moves = 1*9 + 9*8 + 72*7 + 252*6 + 756*5 + 1140*4 + 1372*3 + 696*2 + 222*1 = 16,167
+
+Which is exactly what I got!! Yay. (My q-table is actually of length 17,125, but this is because I included terminal states.)
+
+Now for the actual q-learning part. My first thought is that it may be useful to precompute a dictionary of possible moves for each state, so it doesn't have
+to be computed at every move. 

@@ -11,16 +11,16 @@ def create_q_table():
     possible_states, state_value_dict = list_possible_states.return_states() 
 
     q_table = state_value_dict.copy()
-    print(q_table)
 
     for depth in range(8, -1, -1): # initialise to states one move away from filling the board; increment down to 0 (starting state)
         for state in possible_states[depth]:
             if state not in state_value_dict: # nonterminal state
                 naughts, crosses = state
-                # naughts XOR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
-                free_positions = format(naughts ^ crosses, '09b')
-                # so available moves are wherever a digit of the above result is 0
-                available_moves = [8-i for i, bit in enumerate(free_positions) if bit == '0']
+                # naughts OR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
+                # 1 << i has the ith digit, starting at 0, being a 1 (since 1 is just 0b1, 1 << 3 for example is 0b1000) 
+                # so comparing these two results using the & operator (which gives 1 iff both values are 1) gives a number which has 1
+                # if the position is occupied and 0 if it is not; so we take those values of i for which the result is 0
+                available_moves = [i for i in range(9) if not (naughts | crosses) & (1 << i)]
 
                 moves_and_qs = [] # to keep track of the move which leads to the optimal outcome
 
@@ -30,18 +30,14 @@ def create_q_table():
                         if next_state in state_value_dict:
                             q = state_value_dict[next_state]
                             moves_and_qs.append((n, q))
-                            if q == 1:
-                                break # win for crosses
                     best_q = max(q for n, q in moves_and_qs)
                 
-                if depth % 2 == 1: # naughts' turn
+                else: # naughts' turn
                     for n in available_moves:
                         next_state = (naughts + 2**n, crosses)
                         if next_state in state_value_dict:
                             q = state_value_dict[next_state]
                             moves_and_qs.append((n, q))
-                            if q == -1:
-                                break # win for naughts
                     best_q = min(q for n, q in moves_and_qs)
                 
                 q_table[(naughts, crosses)] = moves_and_qs # updating q-table
@@ -76,7 +72,6 @@ for move_q_list in q_table.values():
 print(len_q)
 print(x_win, o_win, draw)
 
-print(q_table[(0,0)])
 end_time = time.perf_counter()
 
 print(end_time - start_time)

@@ -8,8 +8,7 @@ possible_states, terminal_states = list_possible_states.return_states()
 
 for depth in range(0,9):
     for naughts, crosses in possible_states[depth]:
-        free_positions = format(naughts ^ crosses, '09b')
-        available_moves = [8-i for i, bit in enumerate(free_positions) if bit == '0']
+        available_moves = [i for i in range(9) if not (naughts | crosses) & (1 << i)]
 
 end = time.perf_counter()
 

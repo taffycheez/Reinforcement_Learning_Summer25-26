@@ -3,48 +3,53 @@ and for a random opponent."""
 
 # for random opponent need to average over moves_and_qs list instead of taking max. 
 
-import list_possible_states
-# Retrieving list of possible gameplay and won states from the previous code.
-possible_states = list_possible_states.return_states() 
+import time
 
-q_table = {}
-higher_states = {}
-higher_states[9] = possible_states[9] 
+start_time = time.perf_counter()
 
-depth = 8 # initialise to states one move away from filling the board
-while depth >= 0:   
-    nonterminal_states = [state for state, q in possible_states[depth] if q is None]
-    for state, q in possible_states[depth]:
-        if q is None: # if nonterminal state
-            naughts, crosses = state
-            # naughts XOR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
-            free_positions = format(naughts ^ crosses, '09b')
-            # so available moves are wherever a digit of the above result is 0
-            available_moves = [8-i for i, bit in enumerate(free_positions) if bit == '0']
-            if depth % 2 == 0: # crosses' turn
-                moves_and_qs = []
-                for n in available_moves:
-                    for state, q in higher_states[depth + 1]: # can only lead to a state of depth one higher
-                        if (naughts, crosses + 2**n) == state:
-                            moves_and_qs.append((n,q))
-                            break # each state-move combo can only lead to one resulting state
-                    if q == 1: # if win for crosses
-                        break
-                q_table[(naughts, crosses)] = moves_and_qs
-                max_q = max(q for n, q in moves_and_qs)
-                higher_states.setdefault(depth, []).append(((naughts, crosses), max_q))
-            else: # naughts' turn
-                moves_and_qs = []
-                for n in available_moves:
-                    for state, q in higher_states[depth + 1]:
-                        if (naughts + 2**n, crosses) == state:
-                            moves_and_qs.append((n,q))
-                            break
-                    if q == -1: # if win for naughts
-                        break
-                q_table[(naughts, crosses)] = moves_and_qs
-                min_q = min(q for n, q in moves_and_qs)
-                higher_states.setdefault(depth, []).append(((naughts, crosses), min_q))
-        else: # terminal state
-            higher_states.setdefault(depth, []).append((state, q))
-    depth -= 1
+def create_q_table(): 
+    import list_possible_states
+    # Retrieving list of possible gameplay and won states from the previous code.
+    possible_states, state_value_dict = list_possible_states.return_states() 
+
+    q_table = state_value_dict.copy()
+
+    for depth in range(8, -1, -1): # initialise to states one move away from filling the board; increment down to 0 (starting state)
+        for state in possible_states[depth]:
+            if state not in state_value_dict: # nonterminal state
+                naughts, crosses = state
+                # naughts OR crosses has 0 wherever there are two 0s in a position (free position) and 1 wherever a position is full
+                # 1 << i has the ith digit, starting at 0, being a 1 (since 1 is just 0b1, 1 << 3 for example is 0b1000) 
+                # so comparing these two results using the & operator (which gives 1 iff both values are 1) gives a number which has 1
+                # if the position is occupied and 0 if it is not; so we take those values of i for which the result is 0
+                available_moves = [i for i in range(9) if not (naughts | crosses) & (1 << i)]
+
+                moves_and_qs = [] # to keep track of all possible moves and their results
+
+                if depth % 2 == 0: # crosses' turn
+                    for n in available_moves: # going through possible moves
+                        next_state = (naughts, crosses + 2**n) # adding 2^n changes the nth position (starting from 0, going right to left) to a 1, if it is 0
+                        if next_state in state_value_dict:
+                            q = state_value_dict[next_state]
+                            moves_and_qs.append((n, q))                  
+                
+                else: # naughts' turn
+                    for n in available_moves:
+                        next_state = (naughts + 2**n, crosses)
+                        if next_state in state_value_dict:
+                            q = state_value_dict[next_state]
+                            moves_and_qs.append((n, q))
+                
+                avg_q = sum(q for n, q in moves_and_qs) / len(moves_and_qs)
+                q_table[(naughts, crosses)] = moves_and_qs # updating q-table
+                state_value_dict[state] = avg_q # this is q-value if the player moves optimally. it will be used in future iterations
+    
+    return q_table
+
+q_table = create_q_table()
+
+print(q_table[(0,0)])
+end_time = time.perf_counter()
+
+print(end_time - start_time)
+
