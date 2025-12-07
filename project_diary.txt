@@ -267,3 +267,9 @@ Which is exactly what I got!! Yay. (My q-table is actually of length 17,125, but
 
 Now for the actual q-learning part. My first thought is that it may be useful to precompute a dictionary of possible moves for each state, so it doesn't have
 to be computed at every move. 
+
+SUNDAY 7/12/25
+
+I am so cooked. 
+
+1. Want to change q-table so it has prefilled 0s or rewards for the 

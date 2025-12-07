@@ -4,6 +4,11 @@ import math
 # retrieving list of possible states
 import list_possible_states
 POSSIBLE_STATES, TERMINAL_STATES = list_possible_states.return_states() 
+# POSSIBLE_STATES is a dictionary mapping a depth (no. of moves that have occured) to a list of states
+# the states are tuples of binary numbers
+# for example at depth 0 there is just (0,0); at depth 1 there is (0, 1), (0, 2), etc
+
+# TERMINAL_STATES is a dictionary mapping a terminal state to its outcome (1 for crosses won, -1 for naughts won, 0 for draw)
 
 # creating a dictionary of possible moves at each game state
 MOVES_AT_STATE = {}
@@ -14,15 +19,40 @@ for statelist in POSSIBLE_STATES.values():
             moves = [i for i in range(9) if not (naughts | crosses) & (1 << i)]
             MOVES_AT_STATE[state] = moves
 
-# retrieving q-table
+# retrieving optimal q-table
+# this is a dictionary mapping a state to a list of tuples
+# each tuple is a move and a q-value representing the eventual outcome given optimal play on both sides
 import q_table_optimal_opponent
 q_table_optimal = q_table_optimal_opponent.create_q_table()
 
 # initialising resultant q-table
+# decided to use a dictionary mapping state to a dictionary
+# the 'inner' dictionary maps a move to an outcome
 q_table = {}
-for state, moves in MOVES_AT_STATE:
-    q_table[state] = [(move, 0) for move in moves]
+for state, moves in MOVES_AT_STATE.items():
+    q_table[state] = {move: 0 for move in moves}
 
+# outermost function
+def play_tic_tac_toe(games, x_strategy, o_strategy, tau, alpha):
+    """Function which plays the given number of games using the given strategy (random or optimal) for both agent and opponent."""
+    gamecount = 0 # initialise game counter
+    while gamecount < games:
+        # initialise the game state
+        gamestate = (0, 0)
+        while gamestate not in TERMINAL_STATES: # continue playing until a terminal state is achieved
+            old = gamestate # save the old gamestate
+            gamestate, move, r = make_a_turn(gamestate, x_strategy, o_strategy, tau) # make a move
+            if gamestate in TERMINAL_STATES:
+                reward = r
+            else:
+                reward = max(q_table[gamestate].values())
+            q_table[old][move] = (1-alpha) * q_table[old][move] + alpha * reward
+        # update game counter
+        gamecount += 1
+    # return q-table
+    return q_table
+
+# 2nd layer of function
 def make_a_turn(state, x_strategy, o_strategy, tau):
     """"""
     naughts, crosses = state
@@ -35,40 +65,38 @@ def make_a_turn(state, x_strategy, o_strategy, tau):
     else: # naughts' turn
         a = choose_action(state, o_strategy, tau)
         new_state = (naughts + 2**a, crosses)
-    # return the new state s'
-    return new_state
+    if new_state in TERMINAL_STATES:
+        r = TERMINAL_STATES[new_state]
+    else:
+        r = 0
+    # return the new state s', move a, and immediate reward r
+    return new_state, a, r
 
-def choose_action(state, strategy, tau):
+# 3rd layer of function
+def choose_action(state, strategy, tau):    
     """"""
+    naughts, crosses = state
+    n_0 = naughts.bit_count()
+    n_x = crosses.bit_count()
     # random strategy chooses with equal probabilities so Pr(a) = 1/N_a 
     if strategy == 'random':
         move = random.choice(MOVES_AT_STATE[state])
     # optimal strategy has Pr(a) = 1 for argmax Q[s,]
     if strategy == 'optimal':
-        move = max(q_table_optimal[state], key=lambda x: x[1])[0]
+        if n_0 == n_x:
+            move = max(q_table_optimal[state], key=lambda x: x[1])[0]
+        else: 
+            move = min(q_table_optimal[state], key=lambda x: x[1])[0]
     # if it is the agent
     if strategy == 'learning':
         # Boltzmann function
         weights = []
-        weight_denominator = sum([math.exp(q_table[a]/tau) for a in MOVES_AT_STATE[state]])
+        weight_denominator = sum([math.exp(q_table[state][a]/tau) for a in MOVES_AT_STATE[state]])
         for a in MOVES_AT_STATE[state]:
-            weight = math.exp(q_table[[state]]/tau) / weight_denominator
+            weight = math.exp(q_table[state][a]/tau) / weight_denominator
             weights.append(weight)
         move = random.choices(MOVES_AT_STATE[state], weights = weights, k = 1)[0] # choose a with Pr(a)
     return move
 
-def play_tic_tac_toe(games, x_strategy, o_strategy, tau, alpha):
-    """Function which plays the given number of games using the given strategy (random or optimal) for both agent and opponent."""
-    gamecount = 0 # initialise game counter
-    while gamecount < games:
-        # initialise the game state
-        gamestate = (0, 0)
-        depth = 0
-        while depth < 9 and gamestate not in TERMINAL_STATES: # continue playing until board is filled or a terminal state is achieved
-            gamestate = make_a_turn(gamestate, x_strategy, o_strategy, tau)
-
-        # update game counter
-        gamecount += 1
-
-    # return list of states, actions, resulting states, and immediate rewards [s, a, s', r]
-    return q_table
+q_table_vs_random = play_tic_tac_toe(10000, 'learning', 'optimal', 100, 0.5)
+print(q_table_vs_random)

@@ -69,10 +69,7 @@ for move_q_list in q_table.values():
         else:
             draw += 1
     len_q += len(move_q_list)
-print(len_q)
-print(x_win, o_win, draw)
 
 end_time = time.perf_counter()
 
-print(end_time - start_time)
 
