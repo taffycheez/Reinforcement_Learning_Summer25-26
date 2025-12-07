@@ -1,6 +1,18 @@
 import random
 import math
 
+def bitboard_to_visual(bitboard):
+    visual = list('_' for i in range(9)) # creating 'empty' list
+    naughts, crosses = bitboard
+    naughts, crosses = format(naughts, '09b'), format(crosses,'09b') # e.g. the binary number 0b011010000 becomes the string '011010000'
+    for index, digit in enumerate(naughts):
+        if digit == '1': # if naughts occupy this position
+            visual[index] = 'o'
+    for index, digit in enumerate(crosses):
+        if digit == '1': # if crosses occupy this position
+            visual[index] = 'x' 
+    return ''.join(visual) # joining list to create a string and returning
+
 # retrieving list of possible states
 import list_possible_states
 POSSIBLE_STATES, TERMINAL_STATES = list_possible_states.return_states() 
@@ -39,14 +51,23 @@ def play_tic_tac_toe(games, x_strategy, o_strategy, tau, alpha):
     while gamecount < games:
         # initialise the game state
         gamestate = (0, 0)
-        while gamestate not in TERMINAL_STATES: # continue playing until a terminal state is achieved
+        while gamestate not in TERMINAL_STATES: # continsue playing until a terminal state is achieved
             old = gamestate # save the old gamestate
             gamestate, move, r = make_a_turn(gamestate, x_strategy, o_strategy, tau) # make a move
-            if gamestate in TERMINAL_STATES:
+            
+            if gamestate in TERMINAL_STATES: # if game has ended, reward is what was returned from make_a_turn
                 reward = r
-            else:
-                reward = max(q_table[gamestate].values())
+            else: # otherwise, reward is the best possible outcome from the next resulting state
+                # (it should be r + max q_table[gamestate].values() but since r is 0 for non-terminal states i left it out)
+                if o_strategy == 'optimal':
+                    reward = min(q for m, q in q_table_optimal[gamestate])
+                else:
+                    reward = max(q_table[gamestate].values())
             q_table[old][move] = (1-alpha) * q_table[old][move] + alpha * reward
+            
+            if gamestate not in TERMINAL_STATES:
+                gamestate, _, _  = make_a_turn(gamestate, x_strategy, o_strategy, tau)
+            # print(bitboard_to_visual(old), bitboard_to_visual(gamestate), r, q_table[old][move])
         # update game counter
         gamecount += 1
     # return q-table
@@ -75,6 +96,7 @@ def make_a_turn(state, x_strategy, o_strategy, tau):
 # 3rd layer of function
 def choose_action(state, strategy, tau):    
     """"""
+    # do this to figure out whose turn it is
     naughts, crosses = state
     n_0 = naughts.bit_count()
     n_x = crosses.bit_count()
@@ -83,14 +105,17 @@ def choose_action(state, strategy, tau):
         move = random.choice(MOVES_AT_STATE[state])
     # optimal strategy has Pr(a) = 1 for argmax Q[s,]
     if strategy == 'optimal':
-        if n_0 == n_x:
+        if n_0 == n_x: # crosses' turn
+            # this returns the move with the max q-value (best outcome for crosses)
             move = max(q_table_optimal[state], key=lambda x: x[1])[0]
-        else: 
+        else: # naughts' turn
+            # this returns the move with the min q-value (best outcome for naughts)
             move = min(q_table_optimal[state], key=lambda x: x[1])[0]
     # if it is the agent
     if strategy == 'learning':
         # Boltzmann function
         weights = []
+        # precomputing sum for speed
         weight_denominator = sum([math.exp(q_table[state][a]/tau) for a in MOVES_AT_STATE[state]])
         for a in MOVES_AT_STATE[state]:
             weight = math.exp(q_table[state][a]/tau) / weight_denominator
@@ -98,5 +123,11 @@ def choose_action(state, strategy, tau):
         move = random.choices(MOVES_AT_STATE[state], weights = weights, k = 1)[0] # choose a with Pr(a)
     return move
 
-q_table_vs_random = play_tic_tac_toe(10000, 'learning', 'optimal', 100, 0.5)
-print(q_table_vs_random)
+table = play_tic_tac_toe(10000, 'learning', 'random', 5, 0.1)
+
+print(table[(0,0)])
+
+# for state, d in table.items():
+#     for m, q in d.items():
+#         if q != 0:
+#             print(bitboard_to_visual(state), m, q)
