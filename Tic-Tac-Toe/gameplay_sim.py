@@ -3,8 +3,23 @@
 - random opponent against optimal agent 
 - optimal opponent against optimal agent
 - optimal opponent against random agent"""
-import random 
 
+def bitboard_to_visual(bitboard):
+    visual = list('_' for i in range(9)) # creating 'empty' list
+    naughts, crosses = bitboard
+    naughts, crosses = format(naughts, '09b'), format(crosses,'09b') # e.g. the binary number 0b011010000 becomes the string '011010000'
+    for index, digit in enumerate(naughts):
+        if digit == '1': # if naughts occupy this position
+            visual[index] = 'o'
+    for index, digit in enumerate(crosses):
+        if digit == '1': # if crosses occupy this position
+            visual[index] = 'x' 
+    return ''.join(visual) # joining list to create a string and returning
+
+import random 
+import q_learning
+q_table_vs_optimal = q_learning.play_tic_tac_toe(10000, 'learning', 'optimal', 5, 0.01)
+q_table_vs_random = q_learning.play_tic_tac_toe(10000, 'learning', 'random', 5, 0.01)
 # retrieving list of possible states
 import list_possible_states
 POSSIBLE_STATES, TERMINAL_STATES = list_possible_states.return_states() 
@@ -46,6 +61,10 @@ def choose_action(state, strategy):
     # optimal strategy chooses the value of a which maximises q
     if strategy == 'optimal':
         move = max(q_table[state], key=lambda x: x[1])[0]
+    if strategy == 'learned_against_optimal':
+        move = max(q_table_vs_optimal[state], key=lambda x: q_table_vs_optimal[state][x])
+    if strategy == 'learned_against_random':
+        move = max(q_table_vs_random[state], key=lambda x: q_table_vs_optimal[state][x])
     return move
 
 def play_tic_tac_toe(games, x_strategy, o_strategy):
@@ -70,5 +89,15 @@ def play_tic_tac_toe(games, x_strategy, o_strategy):
     # return list of states, actions, resulting states, and immediate rewards [s, a, s', r]
     return gamelist
 
-gamelist = play_tic_tac_toe(10, 'random', 'random')
-print(gamelist)
+gamelist = play_tic_tac_toe(100, 'learned_against_optimal', 'optimal')
+x_wins = 0
+o_wins = 0
+draws = 0
+for game in gamelist:
+    if game[-1] == 1:
+        x_wins += 1
+    elif game[-1] == -1:
+        o_wins += 1
+    else:
+        draws += 1
+print(x_wins, o_wins, draws)

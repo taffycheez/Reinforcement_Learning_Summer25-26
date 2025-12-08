@@ -1,0 +1,24 @@
+ENVIRONMENT VARIABLES
+
+initialise q_table to all zeroes - looks like {state: {move: 0, move: 0, move: 0}, state: {}...}
+
+game_counter = 0
+
+def q_learning(x_strategy, o_strategy, tau, alpha):
+    while game_counter < games:
+        initialise game state
+        while gamestate is not terminal:
+            state = state'
+            state', move, outcome = make_a_turn(gamestate, x_strategy, o_strategy, tau) - x moves
+
+            if gamestate is not terminal - so o can move:
+                state', _, outcome = make_a_turn, x_strategy, o_strategy, tau
+
+            if gamestate is still not terminal (after o's move):
+                outcome returned is 0, so set outcome = max(q that can be achieved from this gamestate)
+            
+            q_table[state][move] = (1-alpha) * q_table[state][move] + alpha * outcome
+                
+        game_counter ++
+
+make_a_turn is standard and uses the Boltzmann function for the agent.

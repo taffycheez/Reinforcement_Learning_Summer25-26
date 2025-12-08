@@ -272,4 +272,7 @@ SUNDAY 7/12/25
 
 I am so cooked. 
 
-1. Want to change q-table so it has prefilled 0s or rewards for the 
+MONDAY 8/12/25
+
+Okay, so we have q-learning code. It doesn't really work. Now why don't we test it anyway. Need to test
+- playing 

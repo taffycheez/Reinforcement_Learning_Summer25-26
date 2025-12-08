@@ -45,67 +45,72 @@ for state, moves in MOVES_AT_STATE.items():
     q_table[state] = {move: 0 for move in moves}
 
 # outermost function
+# def play_tic_tac_toe(games, x_strategy, o_strategy, tau, alpha):
+#     """Function which plays the given number of games using the given strategy (random or optimal) for both agent and opponent."""
+#     gamecount = 0 # initialise game counter
+#     test = []
+#     while gamecount < games:
+#         # initialise the game state
+#         gamestate = (0, 0)
+#         game_info = []
+#         while gamestate not in TERMINAL_STATES: # continue playing until a terminal state is achieved
+#             old = gamestate # save the old gamestate
+#             gamestate, move = make_a_turn(gamestate, x_strategy, o_strategy, tau) # crosses makes a move
+#             if gamestate not in TERMINAL_STATES: # naughts makes a move if the game has not already ended
+#                 gamestate, _ = make_a_turn(gamestate, x_strategy, o_strategy, tau)
+#             game_info.append((old, move))
+#             # print(bitboard_to_visual(old), bitboard_to_visual(gamestate), r, q_table[old][move])
+#         result = TERMINAL_STATES[gamestate]
+#         for state, move in game_info:
+#             q_table[state][move] = (1 - alpha) * q_table[state][move] + alpha * result
+#         # update game counter
+#         gamecount += 1
+#         test.append(q_table[(0,0)][4])
+#     # return q-table
+#     return q_table, test
 def play_tic_tac_toe(games, x_strategy, o_strategy, tau, alpha):
     """Function which plays the given number of games using the given strategy (random or optimal) for both agent and opponent."""
     gamecount = 0 # initialise game counter
     while gamecount < games:
         # initialise the game state
         gamestate = (0, 0)
-        while gamestate not in TERMINAL_STATES: # continsue playing until a terminal state is achieved
+        while gamestate not in TERMINAL_STATES: # continue playing until a terminal state is achieved
             old = gamestate # save the old gamestate
-            gamestate, move, r = make_a_turn(gamestate, x_strategy, o_strategy, tau) # make a move
-            
-            if gamestate in TERMINAL_STATES: # if game has ended, reward is what was returned from make_a_turn
-                reward = r
-            else: # otherwise, reward is the best possible outcome from the next resulting state
-                # (it should be r + max q_table[gamestate].values() but since r is 0 for non-terminal states i left it out)
-                if o_strategy == 'optimal':
-                    reward = min(q for m, q in q_table_optimal[gamestate])
-                else:
-                    reward = max(q_table[gamestate].values())
-            q_table[old][move] = (1-alpha) * q_table[old][move] + alpha * reward
-            
-            if gamestate not in TERMINAL_STATES:
-                gamestate, _, _  = make_a_turn(gamestate, x_strategy, o_strategy, tau)
-            # print(bitboard_to_visual(old), bitboard_to_visual(gamestate), r, q_table[old][move])
+            gamestate, move, r = make_a_turn(gamestate, 'x', x_strategy, tau) # x makes a move
+            if gamestate not in TERMINAL_STATES: # naughts moves
+                gamestate, _, r = make_a_turn(gamestate, 'o', o_strategy, tau)
+            if gamestate not in TERMINAL_STATES: # if still no terminal state after naughts' turn
+                r = max(q_table[gamestate].values())
+            q_table[old][move] = (1-alpha) * q_table[old][move] + alpha * r
+            #print(bitboard_to_visual(gamestate), move, r, q_table[old][move])
         # update game counter
         gamecount += 1
     # return q-table
     return q_table
 
 # 2nd layer of function
-def make_a_turn(state, x_strategy, o_strategy, tau):
+def make_a_turn(state, player, strategy, tau):
     """"""
     naughts, crosses = state
-    # decide whose turn it is
-    n_0 = naughts.bit_count()
-    n_x = crosses.bit_count()
-    if n_0 == n_x: # crosses' turn
-        a = choose_action(state, x_strategy, tau)
-        new_state = (naughts, crosses + 2**a)
+    if player == 'x': # crosses' turn
+        a = choose_action(state, 'x', strategy, tau)
+        new_state = (naughts, crosses | (1 << a))
     else: # naughts' turn
-        a = choose_action(state, o_strategy, tau)
-        new_state = (naughts + 2**a, crosses)
-    if new_state in TERMINAL_STATES:
-        r = TERMINAL_STATES[new_state]
-    else:
-        r = 0
+        a = choose_action(state, 'o', strategy, tau)
+        new_state = (naughts | ( 1 << a), crosses)
+    r = TERMINAL_STATES[new_state] if new_state in TERMINAL_STATES else 0
     # return the new state s', move a, and immediate reward r
     return new_state, a, r
 
 # 3rd layer of function
-def choose_action(state, strategy, tau):    
+def choose_action(state, player, strategy, tau):    
     """"""
-    # do this to figure out whose turn it is
-    naughts, crosses = state
-    n_0 = naughts.bit_count()
-    n_x = crosses.bit_count()
     # random strategy chooses with equal probabilities so Pr(a) = 1/N_a 
     if strategy == 'random':
         move = random.choice(MOVES_AT_STATE[state])
     # optimal strategy has Pr(a) = 1 for argmax Q[s,]
     if strategy == 'optimal':
-        if n_0 == n_x: # crosses' turn
+        if player == 'x': # crosses' turn
             # this returns the move with the max q-value (best outcome for crosses)
             move = max(q_table_optimal[state], key=lambda x: x[1])[0]
         else: # naughts' turn
@@ -117,17 +122,46 @@ def choose_action(state, strategy, tau):
         weights = []
         # precomputing sum for speed
         weight_denominator = sum([math.exp(q_table[state][a]/tau) for a in MOVES_AT_STATE[state]])
-        for a in MOVES_AT_STATE[state]:
+        for a in MOVES_AT_STATE[state]: # computing weights for each move according to q-table and Boltzmann function
             weight = math.exp(q_table[state][a]/tau) / weight_denominator
             weights.append(weight)
         move = random.choices(MOVES_AT_STATE[state], weights = weights, k = 1)[0] # choose a with Pr(a)
     return move
 
-table = play_tic_tac_toe(10000, 'learning', 'random', 5, 0.1)
+q_table_vs_optimal = play_tic_tac_toe(10000, 'learning', 'optimal', 100, 0.5)
 
-print(table[(0,0)])
+with open("q_learning_table_vs_optimal.txt", "w") as file:
+    file.write("A move is represented by a number, which is the index (going from right to left, starting at 0) of the position to be occupied.\n")
+    file.write("For example, Move: 0 indicates that the player occupied the bottom right square.\n")
+    for state, move_q_dict in q_table_vs_optimal.items():
+        file.write(f"[{bitboard_to_visual(state)}] ")
+        for move, q in move_q_dict.items():
+            file.write(f"Move: {move}, q-value: {q}; ")
+        file.write("\n")
 
-# for state, d in table.items():
-#     for m, q in d.items():
-#         if q != 0:
-#             print(bitboard_to_visual(state), m, q)
+q_table_vs_random = play_tic_tac_toe(10000, 'learning', 'random', 100, 0.5)
+
+with open("q_learning_table_vs_random.txt", "w") as file:
+    file.write("A move is represented by a number, which is the index (going from right to left, starting at 0) of the position to be occupied.\n")
+    file.write("For example, Move: 0 indicates that the player occupied the bottom right square.\n")
+    for state, move_q_dict in q_table_vs_random.items():
+        file.write(f"[{bitboard_to_visual(state)}] ")
+        for move, q in move_q_dict.items():
+            file.write(f"Move: {move}, q-value: {q}; ")
+        file.write("\n")
+
+# # for state, d in table.items():
+# #     for m, q in d.items():
+# #         if q != 0:
+# #             print(bitboard_to_visual(state), m, q)
+
+# import matplotlib.pyplot as plt
+# import numpy as np
+# test = np.array(test)
+
+# x = np.array(range(100000))
+
+# fig, ax = plt.subplots()
+# ax.plot(x, test)
+# ax.grid()
+# plt.show()
