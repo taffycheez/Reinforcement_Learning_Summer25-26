@@ -124,13 +124,13 @@ print(q_table_vs_optimal[(0,0)])
 #             file.write(f"Move: {move}, q-value: {q}; ")
 #         file.write("\n")
 
-# q_table_vs_random = play_tic_tac_toe(10000, 'learning', 'random', 100, 0.5)
+q_table_vs_random = play_tic_tac_toe(10000, 'learning', 'random', 100, 0.5)
 
-# with open("q_learning_table_vs_random.txt", "w") as file:
-#     file.write("A move is represented by a number, which is the index (going from right to left, starting at 0) of the position to be occupied.\n")
-#     file.write("For example, Move: 0 indicates that the player occupied the bottom right square.\n")
-#     for state, move_q_dict in q_table_vs_random.items():
-#         file.write(f"[{bitboard_to_visual(state)}] ")
-#         for move, q in move_q_dict.items():
-#             file.write(f"Move: {move}, q-value: {q}; ")
-#         file.write("\n")
+with open("q_learning_table_vs_random.txt", "w") as file:
+    file.write("A move is represented by a number, which is the index (going from right to left, starting at 0) of the position to be occupied.\n")
+    file.write("For example, Move: 0 indicates that the player occupied the bottom right square.\n")
+    for state, move_q_dict in q_table_vs_random.items():
+        file.write(f"[{bitboard_to_visual(state)}] ")
+        for move, q in move_q_dict.items():
+            file.write(f"Move: {move}, q-value: {q}; ")
+        file.write("\n")

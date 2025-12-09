@@ -11,8 +11,8 @@ def plot_convergence(method):
 
 def plot_performance(method):
     result = []
-    for i in range(1, 101):
-        q_table = method.play_tic_tac_toe(i, 'learning', 'random', 5, 0.1)
+    for i in range(1, 1001):
+        q_table = method.play_tic_tac_toe(i, 'learning', 'random', 10, 0.01)
         games = gameplay_sim.play_tic_tac_toe(100, q_table, 'random')
         outcome = 0
         for game in games:
@@ -22,17 +22,17 @@ def plot_performance(method):
     return result
 
 
-q = plot_performance(q_learning)
 mc = plot_performance(monte_carlo)
 
 import matplotlib.pyplot as plt
 import numpy as np
-q, mc = np.array(q), np.array(mc)
+#q, mc = np.array(q), np.array(mc)
+mc = np.array(mc)
 
-x = np.array(range(100))
+x = np.array(range(1000))
 
 fig, ax = plt.subplots()
-ax.plot(x, q, label = 'q')
+#ax.plot(x, q, label = 'q')
 ax.plot(x, mc, label = 'mc')
 ax.grid()
 ax.legend()
