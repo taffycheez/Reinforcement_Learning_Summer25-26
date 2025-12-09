@@ -1,963 +1,1921 @@
 A move is represented by a number, which is the index (going from right to left, starting at 0) of the position to be occupied.
 For example, Move: 0 indicates that the player occupied the bottom right square.
 [___xxx_oo] Terminal q-value: 1;
+
 [__x_x_xoo] Terminal q-value: 1;
+
 [x__x__xoo] Terminal q-value: 1;
+
 [xxx____oo] Terminal q-value: 1;
+
 [___xxxo_o] Terminal q-value: 1;
+
 [_x__x_oxo] Terminal q-value: 1;
+
 [xxx___o_o] Terminal q-value: 1;
+
 [___xxxoo_] Terminal q-value: 1;
+
 [__x__xoox] Terminal q-value: 1;
+
 [x___x_oox] Terminal q-value: 1;
+
 [xxx___oo_] Terminal q-value: 1;
+
 [__x_xxooo] Terminal q-value: -1;
+
 [__xx_xooo] Terminal q-value: -1;
+
 [__xxx_ooo] Terminal q-value: -1;
+
 [_x__xxooo] Terminal q-value: -1;
+
 [_x_x_xooo] Terminal q-value: -1;
+
 [_x_xx_ooo] Terminal q-value: -1;
+
 [_xx__xooo] Terminal q-value: -1;
+
 [_xx_x_ooo] Terminal q-value: -1;
+
 [_xxx__ooo] Terminal q-value: -1;
+
 [x___xxooo] Terminal q-value: -1;
+
 [x__x_xooo] Terminal q-value: -1;
+
 [x__xx_ooo] Terminal q-value: -1;
+
 [x_x__xooo] Terminal q-value: -1;
+
 [x_x_x_ooo] Terminal q-value: -1;
+
 [x_xx__ooo] Terminal q-value: -1;
+
 [xx___xooo] Terminal q-value: -1;
+
 [xx__x_ooo] Terminal q-value: -1;
+
 [xx_x__ooo] Terminal q-value: -1;
+
 [__x_xox_o] Terminal q-value: 1;
+
 [_x__xo_xo] Terminal q-value: 1;
+
 [x__x_ox_o] Terminal q-value: 1;
+
 [xxx__o__o] Terminal q-value: 1;
+
 [__x_xoxo_] Terminal q-value: 1;
+
 [x___xo_ox] Terminal q-value: 1;
+
 [x__x_oxo_] Terminal q-value: 1;
+
 [xxx__o_o_] Terminal q-value: 1;
+
 [__xxxoxoo] Terminal q-value: 1;
+
 [_xx_xoxoo] Terminal q-value: 1;
+
 [x__xxoxoo] Terminal q-value: 1;
+
 [x_x_xoxoo] Terminal q-value: 1;
+
 [x_xx_oxoo] Terminal q-value: 1;
+
 [xx_x_oxoo] Terminal q-value: 1;
+
 [xxx__oxoo] Terminal q-value: 1;
+
 [xxx_xo_oo] Terminal q-value: 1;
+
 [xxxx_o_oo] Terminal q-value: 1;
+
 [_x__xoox_] Terminal q-value: 1;
+
 [x___xoo_x] Terminal q-value: 1;
+
 [xxx__oo__] Terminal q-value: 1;
+
 [_x_xxooxo] Terminal q-value: 1;
+
 [_xx_xooxo] Terminal q-value: 1;
+
 [xx__xooxo] Terminal q-value: 1;
+
 [xxx__ooxo] Terminal q-value: 1;
+
 [xxx_xoo_o] Terminal q-value: 1;
+
 [xxxx_oo_o] Terminal q-value: 1;
+
 [x__xxooox] Terminal q-value: 1;
+
 [x_x_xooox] Terminal q-value: 1;
+
 [xx__xooox] Terminal q-value: 1;
+
 [xxx__ooox] Terminal q-value: 1;
+
 [xxx_xooo_] Terminal q-value: 1;
+
 [xxxx_ooo_] Terminal q-value: 1;
+
 [_xxxxoooo] Terminal q-value: -1;
+
 [x_xxxoooo] Terminal q-value: -1;
+
 [xx_xxoooo] Terminal q-value: -1;
+
 [x__xo_x_o] Terminal q-value: 1;
+
 [xxx_o___o] Terminal q-value: 1;
+
 [__x_ox_ox] Terminal q-value: 1;
+
 [x__xo_xo_] Terminal q-value: 1;
+
 [xxx_o__o_] Terminal q-value: 1;
+
 [x__xoxxoo] Terminal q-value: 1;
+
 [x_xxo_xoo] Terminal q-value: 1;
+
 [xx_xo_xoo] Terminal q-value: 1;
+
 [xxx_o_xoo] Terminal q-value: 1;
+
 [xxx_ox_oo] Terminal q-value: 1;
+
 [xxxxo__oo] Terminal q-value: 1;
+
 [__x_oxo_x] Terminal q-value: 1;
+
 [xxx_o_o__] Terminal q-value: 1;
+
 [xxx_o_oxo] Terminal q-value: 1;
+
 [xxx_oxo_o] Terminal q-value: 1;
+
 [xxxxo_o_o] Terminal q-value: 1;
+
 [__xxoxoox] Terminal q-value: 1;
+
 [_xx_oxoox] Terminal q-value: 1;
+
 [x_x_oxoox] Terminal q-value: 1;
+
 [xxx_o_oox] Terminal q-value: 1;
+
 [xxx_oxoo_] Terminal q-value: 1;
+
 [xxxxo_oo_] Terminal q-value: 1;
+
 [_xxxoxooo] Terminal q-value: -1;
+
 [x_xxoxooo] Terminal q-value: -1;
+
 [xx_xoxooo] Terminal q-value: -1;
+
 [____ooxxx] Terminal q-value: 1;
+
 [x__xoox__] Terminal q-value: 1;
+
 [xxx_oo___] Terminal q-value: 1;
+
 [x__xooxxo] Terminal q-value: 1;
+
 [x_xxoox_o] Terminal q-value: 1;
+
 [xx_xoox_o] Terminal q-value: 1;
+
 [xxx_oo_xo] Terminal q-value: 1;
+
 [xxx_oox_o] Terminal q-value: 1;
+
 [xxxxoo__o] Terminal q-value: 1;
+
 [x__xooxox] Terminal q-value: 1;
+
 [x_xxooxo_] Terminal q-value: 1;
+
 [xx_xooxo_] Terminal q-value: 1;
+
 [xxx_oo_ox] Terminal q-value: 1;
+
 [xxx_ooxo_] Terminal q-value: 1;
+
 [xxxxoo_o_] Terminal q-value: 1;
+
 [xxxxooxoo] Terminal q-value: 1;
+
 [xxx_ooo_x] Terminal q-value: 1;
+
 [xxx_ooox_] Terminal q-value: 1;
+
 [xxxxooo__] Terminal q-value: 1;
+
 [xxxxoooxo] Terminal q-value: 1;
+
 [xxxxoooox] Terminal q-value: 1;
+
 [__xox_x_o] Terminal q-value: 1;
+
 [_x_ox__xo] Terminal q-value: 1;
+
 [xxxo____o] Terminal q-value: 1;
+
 [__xo_x_ox] Terminal q-value: 1;
+
 [__xox_xo_] Terminal q-value: 1;
+
 [x__ox__ox] Terminal q-value: 1;
+
 [xxxo___o_] Terminal q-value: 1;
+
 [__xoxxxoo] Terminal q-value: 1;
+
 [_xxox_xoo] Terminal q-value: 1;
+
 [x_xox_xoo] Terminal q-value: 1;
+
 [xxxo__xoo] Terminal q-value: 1;
+
 [xxxo_x_oo] Terminal q-value: 1;
+
 [xxxox__oo] Terminal q-value: 1;
+
 [__xo_xo_x] Terminal q-value: 1;
+
 [_x_ox_ox_] Terminal q-value: 1;
+
 [x__ox_o_x] Terminal q-value: 1;
+
 [xxxo__o__] Terminal q-value: 1;
+
 [_x_oxxoxo] Terminal q-value: 1;
+
 [_xxox_oxo] Terminal q-value: 1;
+
 [xx_ox_oxo] Terminal q-value: 1;
+
 [xxxo__oxo] Terminal q-value: 1;
+
 [xxxo_xo_o] Terminal q-value: 1;
+
 [xxxox_o_o] Terminal q-value: 1;
+
 [__xoxxoox] Terminal q-value: 1;
+
 [_xxo_xoox] Terminal q-value: 1;
+
 [x__oxxoox] Terminal q-value: 1;
+
 [x_xo_xoox] Terminal q-value: 1;
+
 [x_xox_oox] Terminal q-value: 1;
+
 [xx_ox_oox] Terminal q-value: 1;
+
 [xxxo__oox] Terminal q-value: 1;
+
 [xxxo_xoo_] Terminal q-value: 1;
+
 [xxxox_oo_] Terminal q-value: 1;
+
 [_xxoxxooo] Terminal q-value: -1;
+
 [x_xoxxooo] Terminal q-value: -1;
+
 [xx_oxxooo] Terminal q-value: -1;
+
 [___o_oxxx] Terminal q-value: 1;
+
 [__xoxox__] Terminal q-value: 1;
+
 [_x_oxo_x_] Terminal q-value: 1;
+
 [x__oxo__x] Terminal q-value: 1;
+
 [xxxo_o___] Terminal q-value: 1;
+
 [__xoxoxxo] Terminal q-value: 1;
+
 [_x_oxoxxo] Terminal q-value: 1;
+
 [_xxoxo_xo] Terminal q-value: 1;
+
 [_xxoxox_o] Terminal q-value: 1;
+
 [x_xoxox_o] Terminal q-value: 1;
+
 [xx_oxo_xo] Terminal q-value: 1;
+
 [xxxo_o_xo] Terminal q-value: 1;
+
 [xxxo_ox_o] Terminal q-value: 1;
+
 [xxxoxo__o] Terminal q-value: 1;
+
 [__xoxoxox] Terminal q-value: 1;
+
 [_xxoxoxo_] Terminal q-value: 1;
+
 [x__oxoxox] Terminal q-value: 1;
+
 [x_xoxo_ox] Terminal q-value: 1;
+
 [x_xoxoxo_] Terminal q-value: 1;
+
 [xx_oxo_ox] Terminal q-value: 1;
+
 [xxxo_o_ox] Terminal q-value: 1;
+
 [xxxo_oxo_] Terminal q-value: 1;
+
 [xxxoxo_o_] Terminal q-value: 1;
+
 [xxxoxoxoo] Terminal q-value: 1;
+
 [_x_oxooxx] Terminal q-value: 1;
+
 [_xxoxoox_] Terminal q-value: 1;
+
 [x__oxooxx] Terminal q-value: 1;
+
 [x_xoxoo_x] Terminal q-value: 1;
+
 [xx_oxoo_x] Terminal q-value: 1;
+
 [xx_oxoox_] Terminal q-value: 1;
+
 [xxxo_oo_x] Terminal q-value: 1;
+
 [xxxo_oox_] Terminal q-value: 1;
+
 [xxxoxoo__] Terminal q-value: 1;
+
 [xxxoxooxo] Terminal q-value: 1;
+
 [xxxoxooox] Terminal q-value: 1;
+
 [___oo_xxx] Terminal q-value: 1;
+
 [__xoox__x] Terminal q-value: 1;
+
 [xxxoo____] Terminal q-value: 1;
+
 [xxxoo__xo] Terminal q-value: 1;
+
 [xxxoo_x_o] Terminal q-value: 1;
+
 [xxxoox__o] Terminal q-value: 1;
+
 [__xooxxox] Terminal q-value: 1;
+
 [_xxoox_ox] Terminal q-value: 1;
+
 [x_xoox_ox] Terminal q-value: 1;
+
 [xxxoo__ox] Terminal q-value: 1;
+
 [xxxoo_xo_] Terminal q-value: 1;
+
 [xxxoox_o_] Terminal q-value: 1;
+
 [xxxooxxoo] Terminal q-value: 1;
+
 [__xooxoxx] Terminal q-value: 1;
+
 [_xxooxo_x] Terminal q-value: 1;
+
 [x_xooxo_x] Terminal q-value: 1;
+
 [xxxoo_o_x] Terminal q-value: 1;
+
 [xxxoo_ox_] Terminal q-value: 1;
+
 [xxxooxo__] Terminal q-value: 1;
+
 [xxxooxoxo] Terminal q-value: 1;
+
 [xxxooxoox] Terminal q-value: 1;
+
 [__xooo_xx] Terminal q-value: -1;
+
 [__xooox_x] Terminal q-value: -1;
+
 [__xoooxx_] Terminal q-value: -1;
+
 [_x_ooo_xx] Terminal q-value: -1;
+
 [_x_ooox_x] Terminal q-value: -1;
+
 [_x_oooxx_] Terminal q-value: -1;
+
 [_xxooo__x] Terminal q-value: -1;
+
 [_xxooo_x_] Terminal q-value: -1;
+
 [_xxooox__] Terminal q-value: -1;
+
 [x__ooo_xx] Terminal q-value: -1;
+
 [x__ooox_x] Terminal q-value: -1;
+
 [x__oooxx_] Terminal q-value: -1;
+
 [x_xooo__x] Terminal q-value: -1;
+
 [x_xooo_x_] Terminal q-value: -1;
+
 [x_xooox__] Terminal q-value: -1;
+
 [xx_ooo__x] Terminal q-value: -1;
+
 [xx_ooo_x_] Terminal q-value: -1;
+
 [xx_ooox__] Terminal q-value: -1;
+
 [_xxoooxxo] Terminal q-value: -1;
+
 [x_xoooxxo] Terminal q-value: -1;
+
 [xx_oooxxo] Terminal q-value: -1;
+
 [_xxoooxox] Terminal q-value: -1;
+
 [x_xoooxox] Terminal q-value: -1;
+
 [xx_oooxox] Terminal q-value: -1;
+
 [_xxooooxx] Terminal q-value: -1;
+
 [x_xooooxx] Terminal q-value: -1;
+
 [xx_ooooxx] Terminal q-value: -1;
+
 [__oxxx__o] Terminal q-value: 1;
+
 [_xo_x__xo] Terminal q-value: 1;
+
 [x_ox__x_o] Terminal q-value: 1;
+
 [__oxxx_o_] Terminal q-value: 1;
+
 [x_o_x__ox] Terminal q-value: 1;
+
 [x_ox__xo_] Terminal q-value: 1;
+
 [__oxxxxoo] Terminal q-value: 1;
+
 [_xoxxx_oo] Terminal q-value: 1;
+
 [x_ox_xxoo] Terminal q-value: 1;
+
 [x_oxx_xoo] Terminal q-value: 1;
+
 [x_oxxx_oo] Terminal q-value: 1;
+
 [xxox__xoo] Terminal q-value: 1;
+
 [__oxxxo__] Terminal q-value: 1;
+
 [_xo_x_ox_] Terminal q-value: 1;
+
 [x_o_x_o_x] Terminal q-value: 1;
+
 [__oxxxoxo] Terminal q-value: 1;
+
 [_xo_xxoxo] Terminal q-value: 1;
+
 [_xoxx_oxo] Terminal q-value: 1;
+
 [_xoxxxo_o] Terminal q-value: 1;
+
 [x_oxxxo_o] Terminal q-value: 1;
+
 [xxo_x_oxo] Terminal q-value: 1;
+
 [__oxxxoox] Terminal q-value: 1;
+
 [_xoxxxoo_] Terminal q-value: 1;
+
 [x_o_xxoox] Terminal q-value: 1;
+
 [x_oxx_oox] Terminal q-value: 1;
+
 [x_oxxxoo_] Terminal q-value: 1;
+
 [xxo_x_oox] Terminal q-value: 1;
+
 [xxo_xxooo] Terminal q-value: -1;
+
 [xxox_xooo] Terminal q-value: -1;
+
 [xxoxx_ooo] Terminal q-value: -1;
+
 [__o__oxxx] Terminal q-value: 1;
+
 [_xo_xo_x_] Terminal q-value: 1;
+
 [x_o_xo__x] Terminal q-value: 1;
+
 [x_ox_ox__] Terminal q-value: 1;
+
 [__o_xoxxo] Terminal q-value: -1;
+
 [__ox_oxxo] Terminal q-value: -1;
+
 [__oxxo_xo] Terminal q-value: -1;
+
 [__oxxox_o] Terminal q-value: -1;
+
 [_xo__oxxo] Terminal q-value: -1;
+
 [_xo_xox_o] Terminal q-value: -1;
+
 [_xox_o_xo] Terminal q-value: -1;
+
 [_xox_ox_o] Terminal q-value: -1;
+
 [_xoxxo__o] Terminal q-value: -1;
+
 [x_o__oxxo] Terminal q-value: -1;
+
 [x_o_xo_xo] Terminal q-value: -1;
+
 [x_o_xox_o] Terminal q-value: -1;
+
 [x_ox_o_xo] Terminal q-value: -1;
+
 [x_oxxo__o] Terminal q-value: -1;
+
 [xxo__o_xo] Terminal q-value: -1;
+
 [xxo__ox_o] Terminal q-value: -1;
+
 [xxo_xo__o] Terminal q-value: -1;
+
 [xxox_o__o] Terminal q-value: -1;
+
 [x_o_xoxox] Terminal q-value: 1;
+
 [x_ox_oxox] Terminal q-value: 1;
+
 [x_oxxo_ox] Terminal q-value: 1;
+
 [x_oxxoxo_] Terminal q-value: 1;
+
 [xxo_xo_ox] Terminal q-value: 1;
+
 [xxox_oxo_] Terminal q-value: 1;
+
 [_xoxxoxoo] Terminal q-value: -1;
+
 [xxo_xoxoo] Terminal q-value: -1;
+
 [xxoxxo_oo] Terminal q-value: -1;
+
 [_xo_xooxx] Terminal q-value: 1;
+
 [_xoxxoox_] Terminal q-value: 1;
+
 [x_o_xooxx] Terminal q-value: 1;
+
 [x_oxxoo_x] Terminal q-value: 1;
+
 [xxo_xoo_x] Terminal q-value: 1;
+
 [xxo_xoox_] Terminal q-value: 1;
+
 [x_oxxooxo] Terminal q-value: -1;
+
 [xxox_ooxo] Terminal q-value: -1;
+
 [xxoxxoo_o] Terminal q-value: -1;
+
 [xxoxxooox] Terminal q-value: 1;
+
 [__o_o_xxx] Terminal q-value: 1;
+
 [x_oxo_x__] Terminal q-value: 1;
+
 [x_oxo_xxo] Terminal q-value: 1;
+
 [x_oxoxx_o] Terminal q-value: 1;
+
 [xxoxo_x_o] Terminal q-value: 1;
+
 [x_oxo_xox] Terminal q-value: 1;
+
 [x_oxoxxo_] Terminal q-value: 1;
+
 [xxoxo_xo_] Terminal q-value: 1;
+
 [xxoxoxxoo] Terminal q-value: 1;
+
 [__o_oxoxx] Terminal q-value: -1;
+
 [__oxo_oxx] Terminal q-value: -1;
+
 [__oxoxo_x] Terminal q-value: -1;
+
 [__oxoxox_] Terminal q-value: -1;
+
 [_xo_o_oxx] Terminal q-value: -1;
+
 [_xo_oxo_x] Terminal q-value: -1;
+
 [_xo_oxox_] Terminal q-value: -1;
+
 [_xoxo_o_x] Terminal q-value: -1;
+
 [_xoxo_ox_] Terminal q-value: -1;
+
 [_xoxoxo__] Terminal q-value: -1;
+
 [x_o_o_oxx] Terminal q-value: -1;
+
 [x_o_oxo_x] Terminal q-value: -1;
+
 [x_o_oxox_] Terminal q-value: -1;
+
 [x_oxo_o_x] Terminal q-value: -1;
+
 [x_oxo_ox_] Terminal q-value: -1;
+
 [x_oxoxo__] Terminal q-value: -1;
+
 [xxo_o_o_x] Terminal q-value: -1;
+
 [xxo_o_ox_] Terminal q-value: -1;
+
 [xxo_oxo__] Terminal q-value: -1;
+
 [xxoxo_o__] Terminal q-value: -1;
+
 [_xoxoxoxo] Terminal q-value: -1;
+
 [x_oxoxoxo] Terminal q-value: -1;
+
 [xxo_oxoxo] Terminal q-value: -1;
+
 [xxoxo_oxo] Terminal q-value: -1;
+
 [xxoxoxo_o] Terminal q-value: -1;
+
 [_xoxoxoox] Terminal q-value: -1;
+
 [x_oxoxoox] Terminal q-value: -1;
+
 [xxo_oxoox] Terminal q-value: -1;
+
 [xxoxo_oox] Terminal q-value: -1;
+
 [xxoxoxoo_] Terminal q-value: -1;
+
 [__oxooxxx] Terminal q-value: 1;
+
 [_xo_ooxxx] Terminal q-value: 1;
+
 [x_o_ooxxx] Terminal q-value: 1;
+
 [x_oxoox_x] Terminal q-value: 1;
+
 [x_oxooxx_] Terminal q-value: 1;
+
 [xxoxoox__] Terminal q-value: 1;
+
 [_xoxooxxo] Terminal q-value: -1;
+
 [xxo_ooxxo] Terminal q-value: -1;
+
 [xxoxoo_xo] Terminal q-value: -1;
+
 [xxoxooxox] Terminal q-value: 1;
+
 [_xoxoooxx] Terminal q-value: -1;
+
 [x_oxoooxx] Terminal q-value: -1;
+
 [xxo_oooxx] Terminal q-value: -1;
+
 [xxoxooo_x] Terminal q-value: -1;
+
 [xxoxooox_] Terminal q-value: -1;
+
 [__oo__xxx] Terminal q-value: 1;
+
 [_xoox__x_] Terminal q-value: 1;
+
 [x_oox___x] Terminal q-value: 1;
+
 [_xoox_xxo] Terminal q-value: 1;
+
 [_xooxx_xo] Terminal q-value: 1;
+
 [xxoox__xo] Terminal q-value: 1;
+
 [x_oox_xox] Terminal q-value: 1;
+
 [x_ooxx_ox] Terminal q-value: 1;
+
 [xxoox__ox] Terminal q-value: 1;
+
 [xxooxxxoo] Terminal q-value: 0;
+
 [_xoox_oxx] Terminal q-value: 1;
+
 [_xooxxox_] Terminal q-value: 1;
+
 [x_oox_oxx] Terminal q-value: 1;
+
 [x_ooxxo_x] Terminal q-value: 1;
+
 [xxoox_o_x] Terminal q-value: 1;
+
 [xxoox_ox_] Terminal q-value: 1;
+
 [xxooxxoxo] Terminal q-value: 1;
+
 [xxooxxoox] Terminal q-value: 1;
+
 [__ooxoxxx] Terminal q-value: 1;
+
 [_xoo_oxxx] Terminal q-value: 1;
+
 [_xooxo_xx] Terminal q-value: 1;
+
 [_xooxoxx_] Terminal q-value: 1;
+
 [x_oo_oxxx] Terminal q-value: 1;
+
 [x_ooxo_xx] Terminal q-value: 1;
+
 [x_ooxox_x] Terminal q-value: 1;
+
 [xxooxo__x] Terminal q-value: 1;
+
 [xxooxo_x_] Terminal q-value: 1;
+
 [x_ooxoxxo] Terminal q-value: -1;
+
 [xxoo_oxxo] Terminal q-value: -1;
+
 [xxooxox_o] Terminal q-value: -1;
+
 [xxooxoxox] Terminal q-value: 1;
+
 [xxooxooxx] Terminal q-value: 1;
+
 [__oooxxxx] Terminal q-value: 1;
+
 [_xooo_xxx] Terminal q-value: 1;
+
 [x_ooo_xxx] Terminal q-value: 1;
+
 [xxoooxxxo] Terminal q-value: 0;
+
 [xxoooxxox] Terminal q-value: 0;
+
 [_xoooxoxx] Terminal q-value: -1;
+
 [x_oooxoxx] Terminal q-value: -1;
+
 [xxooo_oxx] Terminal q-value: -1;
+
 [xxoooxo_x] Terminal q-value: -1;
+
 [xxoooxox_] Terminal q-value: -1;
+
 [xxoooo_xx] Terminal q-value: -1;
+
 [xxoooox_x] Terminal q-value: -1;
+
 [xxooooxx_] Terminal q-value: -1;
+
 [_o_xxx__o] Terminal q-value: 1;
+
 [_ox_x_x_o] Terminal q-value: 1;
+
 [xo_x__x_o] Terminal q-value: 1;
+
 [_o_xxx_o_] Terminal q-value: 1;
+
 [_ox__x_ox] Terminal q-value: 1;
+
 [_ox_x_xo_] Terminal q-value: 1;
+
 [xo__x__ox] Terminal q-value: 1;
+
 [xo_x__xo_] Terminal q-value: 1;
+
 [_o_xxxxoo] Terminal q-value: 1;
+
 [_ox_xxxoo] Terminal q-value: 1;
+
 [_oxxx_xoo] Terminal q-value: 1;
+
 [_oxxxx_oo] Terminal q-value: 1;
+
 [xo_x_xxoo] Terminal q-value: 1;
+
 [xo_xx_xoo] Terminal q-value: 1;
+
 [xo_xxx_oo] Terminal q-value: 1;
+
 [xox_x_xoo] Terminal q-value: 1;
+
 [xoxx__xoo] Terminal q-value: 1;
+
 [_o_xxxo__] Terminal q-value: 1;
+
 [_ox__xo_x] Terminal q-value: 1;
+
 [xo__x_o_x] Terminal q-value: 1;
+
 [_o_xxxoxo] Terminal q-value: 1;
+
 [_oxxxxo_o] Terminal q-value: 1;
+
 [xo_xxxo_o] Terminal q-value: 1;
+
 [_o_xxxoox] Terminal q-value: 1;
+
 [_ox_xxoox] Terminal q-value: 1;
+
 [_oxx_xoox] Terminal q-value: 1;
+
 [_oxxxxoo_] Terminal q-value: 1;
+
 [xo__xxoox] Terminal q-value: 1;
+
 [xo_xx_oox] Terminal q-value: 1;
+
 [xo_xxxoo_] Terminal q-value: 1;
+
 [xox__xoox] Terminal q-value: 1;
+
 [xox_x_oox] Terminal q-value: 1;
+
 [xox_xxooo] Terminal q-value: -1;
+
 [xoxx_xooo] Terminal q-value: -1;
+
 [xoxxx_ooo] Terminal q-value: -1;
+
 [_o___oxxx] Terminal q-value: 1;
+
 [_ox_xox__] Terminal q-value: 1;
+
 [xo__xo__x] Terminal q-value: 1;
+
 [xo_x_ox__] Terminal q-value: 1;
+
 [_ox_xoxxo] Terminal q-value: 1;
+
 [_oxxxox_o] Terminal q-value: 1;
+
 [xo_x_oxxo] Terminal q-value: 1;
+
 [xo_xxox_o] Terminal q-value: 1;
+
 [xox_xox_o] Terminal q-value: 1;
+
 [xoxx_ox_o] Terminal q-value: 1;
+
 [_ox_xoxox] Terminal q-value: 1;
+
 [_oxxxoxo_] Terminal q-value: 1;
+
 [xo__xoxox] Terminal q-value: 1;
+
 [xo_x_oxox] Terminal q-value: 1;
+
 [xo_xxo_ox] Terminal q-value: 1;
+
 [xo_xxoxo_] Terminal q-value: 1;
+
 [xox_xo_ox] Terminal q-value: 1;
+
 [xox_xoxo_] Terminal q-value: 1;
+
 [xoxx_oxo_] Terminal q-value: 1;
+
 [xoxxxoxoo] Terminal q-value: 1;
+
 [xo__xooxx] Terminal q-value: 1;
+
 [xo_xxoo_x] Terminal q-value: 1;
+
 [xox_xoo_x] Terminal q-value: 1;
+
 [xoxxxooxo] Terminal q-value: 0;
+
 [xoxxxooox] Terminal q-value: 1;
+
 [_o__o_xxx] Terminal q-value: 1;
+
 [_ox_ox__x] Terminal q-value: 1;
+
 [xo_xo_x__] Terminal q-value: 1;
+
 [xo_xo_xxo] Terminal q-value: 1;
+
 [xo_xoxx_o] Terminal q-value: 1;
+
 [xoxxo_x_o] Terminal q-value: 1;
+
 [_o__oxxox] Terminal q-value: -1;
+
 [_o_xo_xox] Terminal q-value: -1;
+
 [_o_xox_ox] Terminal q-value: -1;
+
 [_o_xoxxo_] Terminal q-value: -1;
+
 [_ox_o_xox] Terminal q-value: -1;
+
 [_ox_oxxo_] Terminal q-value: -1;
+
 [_oxxo__ox] Terminal q-value: -1;
+
 [_oxxo_xo_] Terminal q-value: -1;
+
 [_oxxox_o_] Terminal q-value: -1;
+
 [xo__o_xox] Terminal q-value: -1;
+
 [xo__ox_ox] Terminal q-value: -1;
+
 [xo__oxxo_] Terminal q-value: -1;
+
 [xo_xo__ox] Terminal q-value: -1;
+
 [xo_xox_o_] Terminal q-value: -1;
+
 [xox_o__ox] Terminal q-value: -1;
+
 [xox_o_xo_] Terminal q-value: -1;
+
 [xox_ox_o_] Terminal q-value: -1;
+
 [xoxxo__o_] Terminal q-value: -1;
+
 [_oxxoxxoo] Terminal q-value: -1;
+
 [xox_oxxoo] Terminal q-value: -1;
+
 [xoxxox_oo] Terminal q-value: -1;
+
 [_ox_oxoxx] Terminal q-value: 1;
+
 [_oxxoxo_x] Terminal q-value: 1;
+
 [xox_oxo_x] Terminal q-value: 1;
+
 [xoxxoxoxo] Terminal q-value: 0;
+
 [xo_xoxoox] Terminal q-value: -1;
+
 [xoxxo_oox] Terminal q-value: -1;
+
 [xoxxoxoo_] Terminal q-value: -1;
+
 [_o_xooxxx] Terminal q-value: 1;
+
 [_ox_ooxxx] Terminal q-value: 1;
+
 [xo__ooxxx] Terminal q-value: 1;
+
 [xo_xoox_x] Terminal q-value: 1;
+
 [xo_xooxx_] Terminal q-value: 1;
+
 [xoxxoox__] Terminal q-value: 1;
+
 [xoxxooxxo] Terminal q-value: 1;
+
 [_oxxooxox] Terminal q-value: -1;
+
 [xox_ooxox] Terminal q-value: -1;
+
 [xoxxoo_ox] Terminal q-value: -1;
+
 [xoxxoooxx] Terminal q-value: 0;
+
 [_o_o__xxx] Terminal q-value: 1;
+
 [_oxo_x__x] Terminal q-value: 1;
+
 [_oxox_x__] Terminal q-value: 1;
+
 [xo_ox___x] Terminal q-value: 1;
+
 [_oxox_xxo] Terminal q-value: 1;
+
 [_oxoxxx_o] Terminal q-value: 1;
+
 [xoxox_x_o] Terminal q-value: 1;
+
 [_oxo_xxox] Terminal q-value: 1;
+
 [_oxox_xox] Terminal q-value: 1;
+
 [_oxoxx_ox] Terminal q-value: 1;
+
 [_oxoxxxo_] Terminal q-value: 1;
+
 [xo_ox_xox] Terminal q-value: 1;
+
 [xo_oxx_ox] Terminal q-value: 1;
+
 [xoxo_x_ox] Terminal q-value: 1;
+
 [xoxox__ox] Terminal q-value: 1;
+
 [xoxox_xo_] Terminal q-value: 1;
+
 [xoxoxxxoo] Terminal q-value: 1;
+
 [_oxo_xoxx] Terminal q-value: 1;
+
 [_oxoxxo_x] Terminal q-value: 1;
+
 [xo_ox_oxx] Terminal q-value: 1;
+
 [xo_oxxo_x] Terminal q-value: 1;
+
 [xoxo_xo_x] Terminal q-value: 1;
+
 [xoxox_o_x] Terminal q-value: 1;
+
 [xoxoxxoxo] Terminal q-value: 0;
+
 [xoxoxxoox] Terminal q-value: 1;
+
 [_o_oxoxxx] Terminal q-value: 1;
+
 [_oxo_oxxx] Terminal q-value: 1;
+
 [_oxoxox_x] Terminal q-value: 1;
+
 [_oxoxoxx_] Terminal q-value: 1;
+
 [xo_o_oxxx] Terminal q-value: 1;
+
 [xo_oxo_xx] Terminal q-value: 1;
+
 [xo_oxox_x] Terminal q-value: 1;
+
 [xoxoxo__x] Terminal q-value: 1;
+
 [xoxoxox__] Terminal q-value: 1;
+
 [xoxoxoxxo] Terminal q-value: 1;
+
 [xoxoxoxox] Terminal q-value: 1;
+
 [xoxoxooxx] Terminal q-value: 1;
+
 [_o_ooxxxx] Terminal q-value: 1;
+
 [_oxoo_xxx] Terminal q-value: 1;
+
 [_oxoox_xx] Terminal q-value: 1;
+
 [_oxooxx_x] Terminal q-value: 1;
+
 [xo_oo_xxx] Terminal q-value: 1;
+
 [xoxoox__x] Terminal q-value: 1;
+
 [xoxooxxxo] Terminal q-value: 0;
+
 [xo_ooxxox] Terminal q-value: -1;
+
 [xoxoo_xox] Terminal q-value: -1;
+
 [xoxooxxo_] Terminal q-value: -1;
+
 [xoxooxoxx] Terminal q-value: 1;
+
 [xoxooo_xx] Terminal q-value: -1;
+
 [xoxooox_x] Terminal q-value: -1;
+
 [xoxoooxx_] Terminal q-value: -1;
+
 [_oo___xxx] Terminal q-value: 1;
+
 [_ooxxx___] Terminal q-value: 1;
+
 [xoo_x___x] Terminal q-value: 1;
+
 [xoox__x__] Terminal q-value: 1;
+
 [_ooxxx_xo] Terminal q-value: 1;
+
 [_ooxxxx_o] Terminal q-value: 1;
+
 [xoox__xxo] Terminal q-value: 1;
+
 [xoox_xx_o] Terminal q-value: 1;
+
 [xooxx_x_o] Terminal q-value: 1;
+
 [xooxxx__o] Terminal q-value: 1;
+
 [_ooxxx_ox] Terminal q-value: 1;
+
 [_ooxxxxo_] Terminal q-value: 1;
+
 [xoo_x_xox] Terminal q-value: 1;
+
 [xoo_xx_ox] Terminal q-value: 1;
+
 [xoox__xox] Terminal q-value: 1;
+
 [xoox_xxo_] Terminal q-value: 1;
+
 [xooxx__ox] Terminal q-value: 1;
+
 [xooxx_xo_] Terminal q-value: 1;
+
 [xooxxx_o_] Terminal q-value: 1;
+
 [xooxxxxoo] Terminal q-value: 1;
+
 [_ooxxxo_x] Terminal q-value: 1;
+
 [_ooxxxox_] Terminal q-value: 1;
+
 [xoo_x_oxx] Terminal q-value: 1;
+
 [xoo_xxo_x] Terminal q-value: 1;
+
 [xooxx_o_x] Terminal q-value: 1;
+
 [xooxxxo__] Terminal q-value: 1;
+
 [xooxxxoxo] Terminal q-value: 1;
+
 [xooxxxoox] Terminal q-value: 1;
+
 [_oo_xoxxx] Terminal q-value: 1;
+
 [_oox_oxxx] Terminal q-value: 1;
+
 [xoo__oxxx] Terminal q-value: 1;
+
 [xoo_xo_xx] Terminal q-value: 1;
+
 [xoo_xox_x] Terminal q-value: 1;
+
 [xoox_ox_x] Terminal q-value: 1;
+
 [xoox_oxx_] Terminal q-value: 1;
+
 [xooxxo__x] Terminal q-value: 1;
+
 [xooxxox__] Terminal q-value: 1;
+
 [_ooxxoxxo] Terminal q-value: -1;
+
 [xoo_xoxxo] Terminal q-value: -1;
+
 [xooxxo_xo] Terminal q-value: -1;
+
 [xooxxoxox] Terminal q-value: 1;
+
 [xooxxooxx] Terminal q-value: 1;
+
 [_oo_oxxxx] Terminal q-value: 1;
+
 [_ooxo_xxx] Terminal q-value: 1;
+
 [xoo_o_xxx] Terminal q-value: 1;
+
 [xooxo_x_x] Terminal q-value: 1;
+
 [xooxo_xx_] Terminal q-value: 1;
+
 [xooxoxx__] Terminal q-value: 1;
+
 [xooxoxxxo] Terminal q-value: 1;
+
 [_ooxoxxox] Terminal q-value: -1;
+
 [xoo_oxxox] Terminal q-value: -1;
+
 [xooxox_ox] Terminal q-value: -1;
+
 [_ooxoxoxx] Terminal q-value: -1;
+
 [xoo_oxoxx] Terminal q-value: -1;
+
 [xooxo_oxx] Terminal q-value: -1;
+
 [xooxoxo_x] Terminal q-value: -1;
+
 [xooxoxox_] Terminal q-value: -1;
+
 [xooxooxxx] Terminal q-value: 1;
+
 [_ooo_xxxx] Terminal q-value: 1;
+
 [_ooox_xxx] Terminal q-value: 1;
+
 [xooo__xxx] Terminal q-value: 1;
+
 [xooox__xx] Terminal q-value: 1;
+
 [xooox_x_x] Terminal q-value: 1;
+
 [xoooxx__x] Terminal q-value: 1;
+
 [xoooxxxxo] Terminal q-value: 0;
+
 [xoooxxxox] Terminal q-value: 1;
+
 [xoooxxoxx] Terminal q-value: 1;
+
 [xoooxoxxx] Terminal q-value: 1;
+
 [xooooxxxx] Terminal q-value: 1;
+
 [o__xxx__o] Terminal q-value: 1;
+
 [o_x_x_x_o] Terminal q-value: 1;
+
 [ox__x__xo] Terminal q-value: 1;
+
 [o__xxx_o_] Terminal q-value: 1;
+
 [o_x__x_ox] Terminal q-value: 1;
+
 [o_x_x_xo_] Terminal q-value: 1;
+
 [o__xxxxoo] Terminal q-value: 1;
+
 [o_x_xxxoo] Terminal q-value: 1;
+
 [o_xxx_xoo] Terminal q-value: 1;
+
 [o_xxxx_oo] Terminal q-value: 1;
+
 [ox_xxx_oo] Terminal q-value: 1;
+
 [oxx_x_xoo] Terminal q-value: 1;
+
 [o__xxxo__] Terminal q-value: 1;
+
 [o_x__xo_x] Terminal q-value: 1;
+
 [ox__x_ox_] Terminal q-value: 1;
+
 [o__xxxoxo] Terminal q-value: 1;
+
 [o_xxxxo_o] Terminal q-value: 1;
+
 [ox__xxoxo] Terminal q-value: 1;
+
 [ox_xx_oxo] Terminal q-value: 1;
+
 [ox_xxxo_o] Terminal q-value: 1;
+
 [oxx_x_oxo] Terminal q-value: 1;
+
 [o__xxxoox] Terminal q-value: 1;
+
 [o_x_xxoox] Terminal q-value: 1;
+
 [o_xx_xoox] Terminal q-value: 1;
+
 [o_xxxxoo_] Terminal q-value: 1;
+
 [ox_xxxoo_] Terminal q-value: 1;
+
 [oxx__xoox] Terminal q-value: 1;
+
 [oxx_xxooo] Terminal q-value: -1;
+
 [oxxx_xooo] Terminal q-value: -1;
+
 [oxxxx_ooo] Terminal q-value: -1;
+
 [o____oxxx] Terminal q-value: 1;
+
 [o_x_xox__] Terminal q-value: 1;
+
 [ox__xo_x_] Terminal q-value: 1;
+
 [o_x_xoxxo] Terminal q-value: 1;
+
 [o_xxxox_o] Terminal q-value: 1;
+
 [ox__xoxxo] Terminal q-value: 1;
+
 [ox_xxo_xo] Terminal q-value: 1;
+
 [oxx_xo_xo] Terminal q-value: 1;
+
 [oxx_xox_o] Terminal q-value: 1;
+
 [o_x_xoxox] Terminal q-value: 1;
+
 [o_xxxoxo_] Terminal q-value: 1;
+
 [oxx_xoxo_] Terminal q-value: 1;
+
 [oxxxxoxoo] Terminal q-value: 1;
+
 [ox__xooxx] Terminal q-value: 1;
+
 [ox_xxoox_] Terminal q-value: 1;
+
 [oxx_xoox_] Terminal q-value: 1;
+
 [oxxxxooxo] Terminal q-value: 1;
+
 [oxxxxooox] Terminal q-value: 0;
+
 [o___o_xxx] Terminal q-value: 1;
+
 [o_x_ox__x] Terminal q-value: 1;
+
 [o___oxxxo] Terminal q-value: -1;
+
 [o__xo_xxo] Terminal q-value: -1;
+
 [o__xox_xo] Terminal q-value: -1;
+
 [o__xoxx_o] Terminal q-value: -1;
+
 [o_x_o_xxo] Terminal q-value: -1;
+
 [o_x_ox_xo] Terminal q-value: -1;
+
 [o_x_oxx_o] Terminal q-value: -1;
+
 [o_xxo__xo] Terminal q-value: -1;
+
 [o_xxo_x_o] Terminal q-value: -1;
+
 [o_xxox__o] Terminal q-value: -1;
+
 [ox__o_xxo] Terminal q-value: -1;
+
 [ox__ox_xo] Terminal q-value: -1;
+
 [ox__oxx_o] Terminal q-value: -1;
+
 [ox_xo__xo] Terminal q-value: -1;
+
 [ox_xo_x_o] Terminal q-value: -1;
+
 [ox_xox__o] Terminal q-value: -1;
+
 [oxx_o__xo] Terminal q-value: -1;
+
 [oxx_o_x_o] Terminal q-value: -1;
+
 [oxx_ox__o] Terminal q-value: -1;
+
 [oxxxo___o] Terminal q-value: -1;
+
 [o_x_oxxox] Terminal q-value: 1;
+
 [o_xxox_ox] Terminal q-value: 1;
+
 [oxx_ox_ox] Terminal q-value: 1;
+
 [o_xxoxxoo] Terminal q-value: -1;
+
 [ox_xoxxoo] Terminal q-value: -1;
+
 [oxx_oxxoo] Terminal q-value: -1;
+
 [oxxxo_xoo] Terminal q-value: -1;
+
 [oxxxox_oo] Terminal q-value: -1;
+
 [o_x_oxoxx] Terminal q-value: 1;
+
 [o_xxoxo_x] Terminal q-value: 1;
+
 [oxx_oxo_x] Terminal q-value: 1;
+
 [o_xxoxoxo] Terminal q-value: -1;
+
 [ox_xoxoxo] Terminal q-value: -1;
+
 [oxx_oxoxo] Terminal q-value: -1;
+
 [oxxxo_oxo] Terminal q-value: -1;
+
 [oxxxoxo_o] Terminal q-value: -1;
+
 [oxxxoxoox] Terminal q-value: 1;
+
 [o__xooxxx] Terminal q-value: 1;
+
 [o_x_ooxxx] Terminal q-value: 1;
+
 [ox__ooxxx] Terminal q-value: 1;
+
 [o_xxooxxo] Terminal q-value: -1;
+
 [ox_xooxxo] Terminal q-value: -1;
+
 [oxx_ooxxo] Terminal q-value: -1;
+
 [oxxxoo_xo] Terminal q-value: -1;
+
 [oxxxoox_o] Terminal q-value: -1;
+
 [oxxxooxox] Terminal q-value: 0;
+
 [oxxxoooxx] Terminal q-value: 0;
+
 [o__o__xxx] Terminal q-value: 1;
+
 [o_xo_x__x] Terminal q-value: 1;
+
 [o_xox_x__] Terminal q-value: 1;
+
 [ox_ox__x_] Terminal q-value: 1;
+
 [o_xox_xxo] Terminal q-value: 1;
+
 [o_xoxxx_o] Terminal q-value: 1;
+
 [ox_ox_xxo] Terminal q-value: 1;
+
 [ox_oxx_xo] Terminal q-value: 1;
+
 [oxxox__xo] Terminal q-value: 1;
+
 [oxxox_x_o] Terminal q-value: 1;
+
 [o_xo_xxox] Terminal q-value: 1;
+
 [o_xox_xox] Terminal q-value: 1;
+
 [o_xoxx_ox] Terminal q-value: 1;
+
 [o_xoxxxo_] Terminal q-value: 1;
+
 [oxxo_x_ox] Terminal q-value: 1;
+
 [oxxox_xo_] Terminal q-value: 1;
+
 [oxxoxxxoo] Terminal q-value: 1;
+
 [o__o_xoxx] Terminal q-value: -1;
+
 [o__ox_oxx] Terminal q-value: -1;
+
 [o__oxxo_x] Terminal q-value: -1;
+
 [o__oxxox_] Terminal q-value: -1;
+
 [o_xo__oxx] Terminal q-value: -1;
+
 [o_xo_xox_] Terminal q-value: -1;
+
 [o_xox_o_x] Terminal q-value: -1;
+
 [o_xox_ox_] Terminal q-value: -1;
+
 [o_xoxxo__] Terminal q-value: -1;
+
 [ox_o__oxx] Terminal q-value: -1;
+
 [ox_o_xo_x] Terminal q-value: -1;
+
 [ox_o_xox_] Terminal q-value: -1;
+
 [ox_ox_o_x] Terminal q-value: -1;
+
 [ox_oxxo__] Terminal q-value: -1;
+
 [oxxo__o_x] Terminal q-value: -1;
+
 [oxxo__ox_] Terminal q-value: -1;
+
 [oxxo_xo__] Terminal q-value: -1;
+
 [oxxox_o__] Terminal q-value: -1;
+
 [o_xoxxoxo] Terminal q-value: -1;
+
 [oxxo_xoxo] Terminal q-value: -1;
+
 [oxxoxxo_o] Terminal q-value: -1;
+
 [ox_oxxoox] Terminal q-value: -1;
+
 [oxxox_oox] Terminal q-value: -1;
+
 [oxxoxxoo_] Terminal q-value: -1;
+
 [o__oxoxxx] Terminal q-value: 1;
+
 [o_xo_oxxx] Terminal q-value: 1;
+
 [o_xoxox_x] Terminal q-value: 1;
+
 [o_xoxoxx_] Terminal q-value: 1;
+
 [ox_o_oxxx] Terminal q-value: 1;
+
 [ox_oxo_xx] Terminal q-value: 1;
+
 [ox_oxoxx_] Terminal q-value: 1;
+
 [oxxoxo_x_] Terminal q-value: 1;
+
 [oxxoxox__] Terminal q-value: 1;
+
 [oxxoxoxxo] Terminal q-value: 1;
+
 [oxxoxoxox] Terminal q-value: 1;
+
 [o_xoxooxx] Terminal q-value: -1;
+
 [oxxo_ooxx] Terminal q-value: -1;
+
 [oxxoxoo_x] Terminal q-value: -1;
+
 [o__ooxxxx] Terminal q-value: 1;
+
 [o_xoo_xxx] Terminal q-value: 1;
+
 [o_xoox_xx] Terminal q-value: 1;
+
 [o_xooxx_x] Terminal q-value: 1;
+
 [ox_oo_xxx] Terminal q-value: 1;
+
 [oxxoox__x] Terminal q-value: 1;
+
 [o_xooxxxo] Terminal q-value: -1;
+
 [ox_ooxxxo] Terminal q-value: -1;
+
 [oxxoo_xxo] Terminal q-value: -1;
+
 [oxxoox_xo] Terminal q-value: -1;
+
 [oxxooxx_o] Terminal q-value: -1;
+
 [oxxooxxox] Terminal q-value: 1;
+
 [ox_ooxoxx] Terminal q-value: -1;
+
 [oxxoo_oxx] Terminal q-value: -1;
+
 [oxxooxox_] Terminal q-value: -1;
+
 [oxxooo_xx] Terminal q-value: -1;
+
 [oxxooox_x] Terminal q-value: -1;
+
 [oxxoooxx_] Terminal q-value: -1;
+
 [o_o___xxx] Terminal q-value: 1;
+
 [o_oxxx___] Terminal q-value: 1;
+
 [oxo_x__x_] Terminal q-value: 1;
+
 [o_oxxx_xo] Terminal q-value: 1;
+
 [o_oxxxx_o] Terminal q-value: 1;
+
 [oxo_x_xxo] Terminal q-value: 1;
+
 [oxo_xx_xo] Terminal q-value: 1;
+
 [oxoxx__xo] Terminal q-value: 1;
+
 [oxoxxx__o] Terminal q-value: 1;
+
 [o_oxxx_ox] Terminal q-value: 1;
+
 [o_oxxxxo_] Terminal q-value: 1;
+
 [oxoxxx_o_] Terminal q-value: 1;
+
 [oxoxxxxoo] Terminal q-value: 1;
+
 [o_oxxxo_x] Terminal q-value: 1;
+
 [o_oxxxox_] Terminal q-value: 1;
+
 [oxo_x_oxx] Terminal q-value: 1;
+
 [oxo_xxox_] Terminal q-value: 1;
+
 [oxoxx_ox_] Terminal q-value: 1;
+
 [oxoxxxo__] Terminal q-value: 1;
+
 [oxoxxxoxo] Terminal q-value: 1;
+
 [oxoxxxoox] Terminal q-value: 1;
+
 [o_o_xoxxx] Terminal q-value: 1;
+
 [o_ox_oxxx] Terminal q-value: 1;
+
 [oxo__oxxx] Terminal q-value: 1;
+
 [oxo_xo_xx] Terminal q-value: 1;
+
 [oxo_xoxx_] Terminal q-value: 1;
+
 [oxoxxo_x_] Terminal q-value: 1;
+
 [o_oxxoxxo] Terminal q-value: -1;
+
 [oxox_oxxo] Terminal q-value: -1;
+
 [oxoxxox_o] Terminal q-value: -1;
+
 [oxoxxoxox] Terminal q-value: 0;
+
 [oxoxxooxx] Terminal q-value: 1;
+
 [o_o_oxxxx] Terminal q-value: 1;
+
 [o_oxo_xxx] Terminal q-value: 1;
+
 [oxo_o_xxx] Terminal q-value: 1;
+
 [o_oxoxxxo] Terminal q-value: -1;
+
 [oxo_oxxxo] Terminal q-value: -1;
+
 [oxoxo_xxo] Terminal q-value: -1;
+
 [oxoxox_xo] Terminal q-value: -1;
+
 [oxoxoxx_o] Terminal q-value: -1;
+
 [oxoxoxxox] Terminal q-value: 0;
+
 [o_oxoxoxx] Terminal q-value: -1;
+
 [oxo_oxoxx] Terminal q-value: -1;
+
 [oxoxo_oxx] Terminal q-value: -1;
+
 [oxoxoxo_x] Terminal q-value: -1;
+
 [oxoxoxox_] Terminal q-value: -1;
+
 [oxoxooxxx] Terminal q-value: 1;
+
 [o_oo_xxxx] Terminal q-value: 1;
+
 [o_oox_xxx] Terminal q-value: 1;
+
 [oxoo__xxx] Terminal q-value: 1;
+
 [oxoox__xx] Terminal q-value: 1;
+
 [oxoox_xx_] Terminal q-value: 1;
+
 [oxooxx_x_] Terminal q-value: 1;
+
 [oxooxxxxo] Terminal q-value: 1;
+
 [oxooxxxox] Terminal q-value: 0;
+
 [o_ooxxoxx] Terminal q-value: -1;
+
 [oxoo_xoxx] Terminal q-value: -1;
+
 [oxooxxo_x] Terminal q-value: -1;
+
 [oxooxoxxx] Terminal q-value: 1;
+
 [oxoooxxxx] Terminal q-value: 1;
+
 [oo____xxx] Terminal q-value: 1;
+
 [oo_xxx___] Terminal q-value: 1;
+
 [oox__x__x] Terminal q-value: 1;
+
 [oox_x_x__] Terminal q-value: 1;
+
 [oo_xxx_xo] Terminal q-value: 1;
+
 [oo_xxxx_o] Terminal q-value: 1;
+
 [oox_x_xxo] Terminal q-value: 1;
+
 [oox_xxx_o] Terminal q-value: 1;
+
 [ooxxx_x_o] Terminal q-value: 1;
+
 [ooxxxx__o] Terminal q-value: 1;
+
 [oo_xxx_ox] Terminal q-value: 1;
+
 [oo_xxxxo_] Terminal q-value: 1;
+
 [oox__xxox] Terminal q-value: 1;
+
 [oox_x_xox] Terminal q-value: 1;
+
 [oox_xx_ox] Terminal q-value: 1;
+
 [oox_xxxo_] Terminal q-value: 1;
+
 [ooxx_x_ox] Terminal q-value: 1;
+
 [ooxxx_xo_] Terminal q-value: 1;
+
 [ooxxxx_o_] Terminal q-value: 1;
+
 [ooxxxxxoo] Terminal q-value: 1;
+
 [oo_xxxo_x] Terminal q-value: 1;
+
 [oo_xxxox_] Terminal q-value: 1;
+
 [oox__xoxx] Terminal q-value: 1;
+
 [oox_xxo_x] Terminal q-value: 1;
+
 [ooxx_xo_x] Terminal q-value: 1;
+
 [ooxxxxo__] Terminal q-value: 1;
+
 [ooxxxxoxo] Terminal q-value: 1;
+
 [ooxxxxoox] Terminal q-value: 1;
+
 [oo__xoxxx] Terminal q-value: 1;
+
 [oo_x_oxxx] Terminal q-value: 1;
+
 [oox__oxxx] Terminal q-value: 1;
+
 [oox_xox_x] Terminal q-value: 1;
+
 [oox_xoxx_] Terminal q-value: 1;
+
 [ooxxxox__] Terminal q-value: 1;
+
 [ooxxxoxxo] Terminal q-value: 1;
+
 [ooxxxoxox] Terminal q-value: 1;
+
 [ooxxxooxx] Terminal q-value: 0;
+
 [oo__oxxxx] Terminal q-value: 1;
+
 [oo_xo_xxx] Terminal q-value: 1;
+
 [oox_o_xxx] Terminal q-value: 1;
+
 [oox_ox_xx] Terminal q-value: 1;
+
 [oox_oxx_x] Terminal q-value: 1;
+
 [ooxxox__x] Terminal q-value: 1;
+
 [oo_xoxxxo] Terminal q-value: -1;
+
 [oox_oxxxo] Terminal q-value: -1;
+
 [ooxxo_xxo] Terminal q-value: -1;
+
 [ooxxox_xo] Terminal q-value: -1;
+
 [ooxxoxx_o] Terminal q-value: -1;
+
 [oo_xoxxox] Terminal q-value: -1;
+
 [ooxxo_xox] Terminal q-value: -1;
+
 [ooxxoxxo_] Terminal q-value: -1;
+
 [ooxxoxoxx] Terminal q-value: 1;
+
 [ooxxooxxx] Terminal q-value: 1;
+
 [oo_o_xxxx] Terminal q-value: 1;
+
 [oo_ox_xxx] Terminal q-value: 1;
+
 [ooxo__xxx] Terminal q-value: 1;
+
 [ooxo_x_xx] Terminal q-value: 1;
+
 [ooxo_xx_x] Terminal q-value: 1;
+
 [ooxox_x_x] Terminal q-value: 1;
+
 [ooxox_xx_] Terminal q-value: 1;
+
 [ooxoxx__x] Terminal q-value: 1;
+
 [ooxoxxx__] Terminal q-value: 1;
+
 [ooxoxxxxo] Terminal q-value: 1;
+
 [ooxoxxxox] Terminal q-value: 1;
+
 [oo_oxxoxx] Terminal q-value: -1;
+
 [ooxox_oxx] Terminal q-value: -1;
+
 [ooxoxxox_] Terminal q-value: -1;
+
 [ooxoxoxxx] Terminal q-value: 1;
+
 [ooxooxxxx] Terminal q-value: 1;
+
 [ooo__x_xx] Terminal q-value: -1;
+
 [ooo__xx_x] Terminal q-value: -1;
+
 [ooo__xxx_] Terminal q-value: -1;
+
 [ooo_x__xx] Terminal q-value: -1;
+
 [ooo_x_x_x] Terminal q-value: -1;
+
 [ooo_x_xx_] Terminal q-value: -1;
+
 [ooo_xx__x] Terminal q-value: -1;
+
 [ooo_xx_x_] Terminal q-value: -1;
+
 [ooo_xxx__] Terminal q-value: -1;
+
 [ooox___xx] Terminal q-value: -1;
+
 [ooox__x_x] Terminal q-value: -1;
+
 [ooox__xx_] Terminal q-value: -1;
+
 [ooox_x__x] Terminal q-value: -1;
+
 [ooox_x_x_] Terminal q-value: -1;
+
 [ooox_xx__] Terminal q-value: -1;
+
 [oooxx___x] Terminal q-value: -1;
+
 [oooxx__x_] Terminal q-value: -1;
+
 [oooxx_x__] Terminal q-value: -1;
+
 [ooo_xxxxo] Terminal q-value: -1;
+
 [ooox_xxxo] Terminal q-value: -1;
+
 [oooxx_xxo] Terminal q-value: -1;
+
 [ooo_xxxox] Terminal q-value: -1;
+
 [ooox_xxox] Terminal q-value: -1;
+
 [oooxx_xox] Terminal q-value: -1;
+
 [ooo_xxoxx] Terminal q-value: -1;
+
 [ooox_xoxx] Terminal q-value: -1;
+
 [oooxx_oxx] Terminal q-value: -1;
+
 [oooxxo_xx] Terminal q-value: -1;
+
 [oooxxox_x] Terminal q-value: -1;
+
 [oooxxoxx_] Terminal q-value: -1;
+
 [oooxox_xx] Terminal q-value: -1;
+
 [oooxoxx_x] Terminal q-value: -1;
+
 [oooxoxxx_] Terminal q-value: -1;
+
 [ooooxx_xx] Terminal q-value: -1;
+
 [ooooxxx_x] Terminal q-value: -1;
+
 [ooooxxxx_] Terminal q-value: -1;
+
 [_xxxooxoo] Move: 8, Q-value: 1; 
 [_xxxoooxo] Move: 8, Q-value: 1; 
 [x_xxoooxo] Move: 7, Q-value: 1; 
@@ -5481,5 +6439,4 @@ For example, Move: 0 indicates that the player occupied the bottom right square.
 8242 moves led to crosses winning
 4752 moves led to naughts winning
 3173 moves led to a draw
-958 states were terminal and 16167 were gameplay states
-There were a total of 17125 states
+958 states were terminal.  16167 state-move pairs were found

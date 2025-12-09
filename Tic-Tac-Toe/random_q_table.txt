@@ -5478,8 +5478,7 @@ For example, Move: 0 indicates that the player occupied the bottom right square.
 [_x_______] Move: 0, Q-value: 0.14; Move: 1, Q-value: 0.37; Move: 2, Q-value: 0.14; Move: 3, Q-value: 0.31; Move: 4, Q-value: -0.03; Move: 5, Q-value: 0.31; Move: 6, Q-value: 0.17; Move: 8, Q-value: 0.17; 
 [x________] Move: 0, Q-value: 0.29; Move: 1, Q-value: 0.43; Move: 2, Q-value: 0.29; Move: 3, Q-value: 0.43; Move: 4, Q-value: 0.11; Move: 5, Q-value: 0.46; Move: 6, Q-value: 0.29; Move: 7, Q-value: 0.46; 
 [_________] Move: 0, Q-value: 0.34; Move: 1, Q-value: 0.20; Move: 2, Q-value: 0.34; Move: 3, Q-value: 0.20; Move: 4, Q-value: 0.50; Move: 5, Q-value: 0.20; Move: 6, Q-value: 0.34; Move: 7, Q-value: 0.20; Move: 8, Q-value: 0.34; 
-6989 moves were closer to crosses winning
-1997 moves were closer to naughts winning
-14170 moves were closer to a draw than to either side winning
-958 states were terminal and 23156 were gameplay states
-There were a total of 24114 states
+6991 moves were closer to crosses winning
+2012 moves were closer to naughts winning
+7164 moves were closer to a draw than to either side winning
+958 states were terminal. 16167 state-move pairs were found
