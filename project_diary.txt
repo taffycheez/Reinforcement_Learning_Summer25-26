@@ -276,3 +276,47 @@ MONDAY 8/12/25
 
 Okay, so we have q-learning code. It doesn't really work. Now why don't we test it anyway. Need to test
 - playing 
+
+WEDNESDAY 10/12/25
+
+https://www.youtube.com/watch?v=a548mR3XK0M this video has tic-tac-toe 'q-learning' but he updates AFTER the game (so it's actually Monte Carlo policy 
+evaluation). 
+
+Sutton & Barto: 
+
+Q-learning is off-policy.
+Q(st, at) = Q(st, at) + alpha * (r + max a Q(st+1, a) - Q(st, at))
+The update does not depend on what the agent would *actually* do but on the maximum possible reward.
+The policy does have an effect in that it determines which state-action pairs are visited; but all that is required is that there is sufficient
+exploration that all pairs are continually updated. 
+
+An example of on-policy reinforcement learning is SARSA (State-Action-Reward-State-Action). 
+Q(st, at) = Q(st, at) + alpha * (r + Q(st+1, at+1) - Q(st, at))
+
+Both of these use bootstrapping - at each step we estimate the reward which will be achieved form the next state. This can lead to inaccurate results as our
+results are biased towards our initial q-table values. This is the key feature of 'temporal difference' (TD) learning. It also can speed up learning by
+allowing updates to occur after a 'move', instead of after an episode; and TD still converges to the optimal values. 
+
+In Monte Carlo, bootstrapping is not used. The final outcome is used to update all previous states, usually with some discount factor depending on the
+'distance' to the terminal state. 
+Q(s, a) = Q(s, a) + alpha * (Gt - Q(s,a))
+Gt = sum from k = 0 to T-t-1 gamma^k R_{t+k+1}
+This is guaranteed to be an unbiased estimate of Q(s,a)
+
+Epsilon-greedy strategy vs Boltzmann function? 
+
+V (St) ← V (St) + α[Rt+1 + γV (St+1) − V (St)]
+
+In tic-tac-toe, do we consider the next state to be the state after O has moved, or before O has moved?
+
+Suppose we want to learn how to play against a tic-tac-toe player who is *not always optimal*. We can do this by having, for each state, a number representing
+the probability of winning from that state. For a state with three Xs in a row the value is 1. 
+We play many games, selecting mainly the moves which, according to our table, will maximise our chances of winning, but sometimes picking randomly. After
+moving, the value of our previous state is adjusted to incorporate the value of the next state:
+V(s) <- V(s) + alpha(V(s') - V(s))
+This is a temporal difference learning method because its changes are based on a difference between estimates at two different times.
+This example is an 'afterstate value function' - rather than evaluating a state-move combination, it evaluates board positions after a move has been made.
+This is effective in the tic-tac-toe example because many state-move pairs can lead to the same resulting state, and should thus have the same 'value'. An
+action-value function would have to separately assess all state-move pairs, potentially limiting effective convergence to the real value. 
+
+Learn against itself (self-training)?
